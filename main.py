@@ -20,7 +20,7 @@ class SeaBattle():
         self.copy_of_comp_board = board
         self.comp_board = board
 
-    def player_board_print(self):
+    def player_board_print(self): #вывод стола игрока
         st = '  '
         k = 1
         for i in string.ascii_uppercase[:8]:
@@ -33,7 +33,7 @@ class SeaBattle():
             k += 1
             print(st + ' |')
 
-    def copy_of_comp_board_print(self):
+    def copy_of_comp_board_print(self): #вывод известной информации о столе компьютера
         st = '  '
         k = 1
         for i in string.ascii_uppercase[:8]:
@@ -46,8 +46,8 @@ class SeaBattle():
             k += 1
             print(st + ' |')
 
-    def placement_of_ships(self):
-        def placement(point):
+    def placement_of_ships(self): #расстановка кораблей
+        def placement(point): #функция отвечающая за перевод координат в индексы матрицы и постановку в соотвествующую позицию символ '▢'
             if point[0] == 'A':
                 self.player_board[int(point[1])-1][0] = '▢'
             elif point[0] == 'B':
@@ -64,17 +64,18 @@ class SeaBattle():
                 self.player_board[int(point[1]) - 1][6] = '▢'
             elif point[0] == 'H':
                 self.player_board[int(point[1]) - 1][7] = '▢'
-        def chekc_of_codinates(point):
+        def chekc_of_codinates(point): #функция проверяющая соответствие введенных значений реальным координатам
             if (point[0] not in string.ascii_uppercase[:8]) or (point[1] not in [str(i) for i in range(1, 9)]):
                 return True
             else: return False
 
-        '''for i in range(4):
+        for i in range(4): #расстанока катеров
             a = input(f'Катеров оставлось {4-i}, куда катера ставим: ')
             while chekc_of_codinates(a):
                 a = input(f'Ай, косячим! Катеров оставлось {4 - i}, куда катера ставим: ')
-            placement(a)'''
-        for i in range(3):
+            placement(a)
+
+        for i in range(3): #расстановка эсминцев
             a, b = input(f'Эсминцев осталось {3-i}, куда ставим: ').split(' ')
             print(a[0], b[0], a[1], b[1])
             while chekc_of_codinates(a) and chekc_of_codinates(b):
