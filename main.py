@@ -421,16 +421,13 @@ class SeaBattle():
         Zero_to_Two()
 
 
-
-        k = 0
+        #расставляет крейсеры
         for i in range(2):
             flag_cru = True
             a = randint(0, 7)
             b = randint(0, 7)
-            while not can_put_point(a, b) and k < 2:
-                a = randint(0, 7)
-                b = randint(0, 7)
-                direction = randint(1, 4)
+            direction = randint(1, 4)
+            while flag_cru:
                 if direction == 1:
                     try:
                         if self.comp_board[a][b + 2] != 0 or self.comp_board[a][b + 1] != 0 or self.comp_board[a][b] != 0:
@@ -438,7 +435,6 @@ class SeaBattle():
                         self.comp_board[a][b] = 1
                         self.comp_board[a][b + 2] = 1
                         self.comp_board[a][b + 1] = 1
-                        k += 1
                         flag_cru = False
                     except (Exception, IndexError):
                         try:
@@ -447,7 +443,6 @@ class SeaBattle():
                             self.comp_board[a][b] = 1
                             self.comp_board[a + 2][b] = 1
                             self.comp_board[a + 1][b] = 1
-                            k += 1
                             flag_cru = False
                         except (Exception, IndexError):
                             try:
@@ -456,7 +451,6 @@ class SeaBattle():
                                 self.comp_board[a][b] = 1
                                 self.comp_board[a][b - 2] = 1
                                 self.comp_board[a][b - 1] = 1
-                                k += 1
                                 flag_cru = False
                             except (Exception, IndexError):
                                 try:
@@ -465,10 +459,12 @@ class SeaBattle():
                                     self.comp_board[a][b] = 1
                                     self.comp_board[a - 2][b] = 1
                                     self.comp_board[a - 1][b] = 1
-                                    k += 1
                                     flag_cru = False
                                 except (Exception, IndexError):
                                     flag_cru = True
+                                    a = randint(0, 7)
+                                    b = randint(0, 7)
+                                    direction = randint(1, 4)
 
 
                 elif direction == 2:
@@ -478,7 +474,6 @@ class SeaBattle():
                         self.comp_board[a][b] = 1
                         self.comp_board[a + 2][b] = 1
                         self.comp_board[a + 1][b] = 1
-                        k += 1
                         flag_cru = False
                     except (Exception, IndexError):
                         try:
@@ -487,7 +482,6 @@ class SeaBattle():
                             self.comp_board[a][b] = 1
                             self.comp_board[a][b - 2] = 1
                             self.comp_board[a][b - 1] = 1
-                            k += 1
                             flag_cru = False
                         except (Exception, IndexError):
                             try:
@@ -496,7 +490,6 @@ class SeaBattle():
                                 self.comp_board[a][b] = 1
                                 self.comp_board[a - 2][b] = 1
                                 self.comp_board[a - 1][b] = 1
-                                k += 1
                                 flag_cru = False
                             except (Exception, IndexError):
                                 try:
@@ -505,10 +498,12 @@ class SeaBattle():
                                     self.comp_board[a][b] = 1
                                     self.comp_board[a][b + 2] = 1
                                     self.comp_board[a][b + 1] = 1
-                                    k += 1
                                     flag_cru = False
                                 except (Exception, IndexError):
                                     flag_cru = True
+                                    a = randint(0, 7)
+                                    b = randint(0, 7)
+                                    direction = randint(1, 4)
 
                 elif direction == 3:
                     try:
@@ -517,7 +512,6 @@ class SeaBattle():
                         self.comp_board[a][b] = 1
                         self.comp_board[a][b - 2] = 1
                         self.comp_board[a][b - 1] = 1
-                        k += 1
                         flag_cru = False
                     except (Exception, IndexError):
                         try:
@@ -526,7 +520,6 @@ class SeaBattle():
                             self.comp_board[a][b] = 1
                             self.comp_board[a - 2][b] = 1
                             self.comp_board[a - 1][b] = 1
-                            k += 1
                             flag_cru = False
                         except (Exception, IndexError):
                             try:
@@ -535,7 +528,6 @@ class SeaBattle():
                                 self.comp_board[a][b] = 1
                                 self.comp_board[a][b + 2] = 1
                                 self.comp_board[a][b + 1] = 1
-                                k += 1
                                 flag_cru = False
                             except (Exception, IndexError):
                                 try:
@@ -544,10 +536,12 @@ class SeaBattle():
                                     self.comp_board[a][b] = 1
                                     self.comp_board[a + 2][b] = 1
                                     self.comp_board[a + 1][b] = 1
-                                    k += 1
                                     flag_cru = False
                                 except (Exception, IndexError):
                                     flag_cru = True
+                                    a = randint(0, 7)
+                                    b = randint(0, 7)
+                                    direction = randint(1, 4)
 
                 elif direction == 4:
                     try:
@@ -556,7 +550,6 @@ class SeaBattle():
                         self.comp_board[a][b] = 1
                         self.comp_board[a - 2][b] = 1
                         self.comp_board[a - 1][b] = 1
-                        k += 1
                         flag_cru = False
                     except (Exception, IndexError):
                         try:
@@ -565,7 +558,6 @@ class SeaBattle():
                             self.comp_board[a][b] = 1
                             self.comp_board[a][b + 2] = 1
                             self.comp_board[a][b + 1] = 1
-                            k += 1
                             flag_cru = False
                         except (Exception, IndexError):
                             try:
@@ -574,7 +566,6 @@ class SeaBattle():
                                 self.comp_board[a][b] = 1
                                 self.comp_board[a + 2][b] = 1
                                 self.comp_board[a + 1][b] = 1
-                                k += 1
                                 flag_cru = False
                             except (Exception, IndexError):
                                 try:
@@ -583,12 +574,18 @@ class SeaBattle():
                                     self.comp_board[a][b] = 1
                                     self.comp_board[a][b - 2] = 1
                                     self.comp_board[a][b - 1] = 1
-                                    k += 1
                                     flag_cru = False
                                 except (Exception, IndexError):
                                     flag_cru = True
+                                    a = randint(0, 7)
+                                    b = randint(0, 7)
+                                    direction = randint(1, 4)
+
                 print(a, b, direction)
                 Zero_to_Two()
+
+
+
 
 
 
