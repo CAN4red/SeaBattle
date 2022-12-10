@@ -299,12 +299,12 @@ class SeaBattle():
                         except:
                             pass
                         try:
-                            if self.comp_board[i - 1][j] == 0:
+                            if self.comp_board[i - 1][j] == 0 and (i - 1 >= 0):
                                 self.comp_board[i - 1][j] = 2
                         except:
                             pass
                         try:
-                            if self.comp_board[i][j - 1] == 0:
+                            if self.comp_board[i][j - 1] == 0 and (j - 1 >= 0):
                                 self.comp_board[i][j - 1] = 2
                         except:
                             pass
@@ -314,20 +314,26 @@ class SeaBattle():
                         except:
                             pass
                         try:
-                            if self.comp_board[i + 1][j - 1] == 0:
+                            if self.comp_board[i + 1][j - 1] == 0 and (j - 1 >= 0):
                                 self.comp_board[i + 1][j - 1] = 2
                         except:
                             pass
                         try:
-                            if self.comp_board[i - 1][j + 1] == 0:
+                            if self.comp_board[i - 1][j + 1] == 0 and (i - 1 >= 0):
                                 self.comp_board[i - 1][j + 1] = 2
                         except:
                             pass
                         try:
-                            if self.comp_board[i - 1][j - 1] == 0:
+                            if self.comp_board[i - 1][j - 1] == 0 and (j - 1 >= 0) and (i - 1 >= 0):
                                 self.comp_board[i - 1][j - 1] = 2
                         except:
                             pass
+        def can_put_point(x, y):
+            if self.comp_board[x][y] == 1 or self.comp_board[x][y] == 2:
+                return True
+            else: return False
+
+
 
         # расставляет линкор
         a = randint(0, 7)
@@ -416,6 +422,178 @@ class SeaBattle():
 
 
 
+        k = 0
+        for i in range(2):
+            flag_cru = True
+            a = randint(0, 7)
+            b = randint(0, 7)
+            while not can_put_point(a, b) and k < 2:
+                a = randint(0, 7)
+                b = randint(0, 7)
+                direction = randint(1, 4)
+                if direction == 1:
+                    try:
+                        if self.comp_board[a][b + 2] != 0 or self.comp_board[a][b + 1] != 0 or self.comp_board[a][b] != 0:
+                            raise Exception
+                        self.comp_board[a][b] = 1
+                        self.comp_board[a][b + 2] = 1
+                        self.comp_board[a][b + 1] = 1
+                        k += 1
+                        flag_cru = False
+                    except (Exception, IndexError):
+                        try:
+                            if self.comp_board[a + 2][b] != 0 or self.comp_board[a + 1][b] != 0  or self.comp_board[a][b] != 0:
+                                raise Exception
+                            self.comp_board[a][b] = 1
+                            self.comp_board[a + 2][b] = 1
+                            self.comp_board[a + 1][b] = 1
+                            k += 1
+                            flag_cru = False
+                        except (Exception, IndexError):
+                            try:
+                                if self.comp_board[a][b - 2] != 0 or self.comp_board[a][b - 1] != 0 or (b - 2 < 0) or self.comp_board[a][b] != 0:
+                                    raise Exception
+                                self.comp_board[a][b] = 1
+                                self.comp_board[a][b - 2] = 1
+                                self.comp_board[a][b - 1] = 1
+                                k += 1
+                                flag_cru = False
+                            except (Exception, IndexError):
+                                try:
+                                    if self.comp_board[a - 2][b] != 0 or self.comp_board[a - 1][b] != 0 or (a - 2 < 0)  or self.comp_board[a][b] != 0:
+                                        raise Exception
+                                    self.comp_board[a][b] = 1
+                                    self.comp_board[a - 2][b] = 1
+                                    self.comp_board[a - 1][b] = 1
+                                    k += 1
+                                    flag_cru = False
+                                except (Exception, IndexError):
+                                    flag_cru = True
+
+
+                elif direction == 2:
+                    try:
+                        if self.comp_board[a + 2][b] != 0 or self.comp_board[a + 1][b] != 0  or self.comp_board[a][b] != 0:
+                            raise Exception
+                        self.comp_board[a][b] = 1
+                        self.comp_board[a + 2][b] = 1
+                        self.comp_board[a + 1][b] = 1
+                        k += 1
+                        flag_cru = False
+                    except (Exception, IndexError):
+                        try:
+                            if self.comp_board[a][b - 2] != 0 or self.comp_board[a][b - 1] != 0 or (b - 2 < 0)  or self.comp_board[a][b] != 0:
+                                raise Exception
+                            self.comp_board[a][b] = 1
+                            self.comp_board[a][b - 2] = 1
+                            self.comp_board[a][b - 1] = 1
+                            k += 1
+                            flag_cru = False
+                        except (Exception, IndexError):
+                            try:
+                                if self.comp_board[a - 2][b] != 0 or self.comp_board[a - 1][b] != 0 or (a - 2 < 0)  or self.comp_board[a][b] != 0:
+                                    raise Exception
+                                self.comp_board[a][b] = 1
+                                self.comp_board[a - 2][b] = 1
+                                self.comp_board[a - 1][b] = 1
+                                k += 1
+                                flag_cru = False
+                            except (Exception, IndexError):
+                                try:
+                                    if self.comp_board[a][b + 2] != 0 or self.comp_board[a][b + 1] != 0  or self.comp_board[a][b] != 0:
+                                        raise Exception
+                                    self.comp_board[a][b] = 1
+                                    self.comp_board[a][b + 2] = 1
+                                    self.comp_board[a][b + 1] = 1
+                                    k += 1
+                                    flag_cru = False
+                                except (Exception, IndexError):
+                                    flag_cru = True
+
+                elif direction == 3:
+                    try:
+                        if self.comp_board[a][b - 2] != 0 or self.comp_board[a][b - 1] != 0 or (b - 2 < 0) or self.comp_board[a][b] != 0:
+                            raise Exception
+                        self.comp_board[a][b] = 1
+                        self.comp_board[a][b - 2] = 1
+                        self.comp_board[a][b - 1] = 1
+                        k += 1
+                        flag_cru = False
+                    except (Exception, IndexError):
+                        try:
+                            if self.comp_board[a - 2][b] != 0 or self.comp_board[a - 1][b] != 0 or (a - 2 < 0) or self.comp_board[a][b] != 0:
+                                raise Exception
+                            self.comp_board[a][b] = 1
+                            self.comp_board[a - 2][b] = 1
+                            self.comp_board[a - 1][b] = 1
+                            k += 1
+                            flag_cru = False
+                        except (Exception, IndexError):
+                            try:
+                                if self.comp_board[a][b + 2] != 0 or self.comp_board[a][b + 1] != 0 or self.comp_board[a][b] != 0:
+                                    raise Exception
+                                self.comp_board[a][b] = 1
+                                self.comp_board[a][b + 2] = 1
+                                self.comp_board[a][b + 1] = 1
+                                k += 1
+                                flag_cru = False
+                            except (Exception, IndexError):
+                                try:
+                                    if self.comp_board[a + 2][b] != 0 or self.comp_board[a + 1][b] != 0 or self.comp_board[a][b] != 0:
+                                        raise Exception
+                                    self.comp_board[a][b] = 1
+                                    self.comp_board[a + 2][b] = 1
+                                    self.comp_board[a + 1][b] = 1
+                                    k += 1
+                                    flag_cru = False
+                                except (Exception, IndexError):
+                                    flag_cru = True
+
+                elif direction == 4:
+                    try:
+                        if self.comp_board[a - 2][b] != 0 or self.comp_board[a - 1][b] != 0 or (a - 2 < 0) or self.comp_board[a][b] != 0:
+                            raise Exception
+                        self.comp_board[a][b] = 1
+                        self.comp_board[a - 2][b] = 1
+                        self.comp_board[a - 1][b] = 1
+                        k += 1
+                        flag_cru = False
+                    except (Exception, IndexError):
+                        try:
+                            if self.comp_board[a][b + 2] != 0 or self.comp_board[a][b + 1] != 0 or self.comp_board[a][b] != 0:
+                                raise Exception
+                            self.comp_board[a][b] = 1
+                            self.comp_board[a][b + 2] = 1
+                            self.comp_board[a][b + 1] = 1
+                            k += 1
+                            flag_cru = False
+                        except (Exception, IndexError):
+                            try:
+                                if self.comp_board[a + 2][b] != 0 or self.comp_board[a + 1][b] != 0 or self.comp_board[a][b] != 0:
+                                    raise Exception
+                                self.comp_board[a][b] = 1
+                                self.comp_board[a + 2][b] = 1
+                                self.comp_board[a + 1][b] = 1
+                                k += 1
+                                flag_cru = False
+                            except (Exception, IndexError):
+                                try:
+                                    if self.comp_board[a][b - 2] != 0 or self.comp_board[a][b - 1] != 0 or (b - 2 < 0) or self.comp_board[a][b] != 0:
+                                        raise Exception
+                                    self.comp_board[a][b] = 1
+                                    self.comp_board[a][b - 2] = 1
+                                    self.comp_board[a][b - 1] = 1
+                                    k += 1
+                                    flag_cru = False
+                                except (Exception, IndexError):
+                                    flag_cru = True
+                print(a, b, direction)
+                Zero_to_Two()
+
+
+
+
+
 
     def bot_board_print(self):  # вывод стола игрока
         st = '  '
@@ -431,10 +609,9 @@ class SeaBattle():
             print(st + ' |')
 
 
-#(a[0] != b[0] and abs(int(a[1]) - int(b[1])) != 1) or (a[1] != b[1] and ((a[0] + b[0] not in string.ascii_uppercase) and (b[0] + a[0] not in string.ascii_uppercase))):
 
 
 game = SeaBattle(board, board, board, board)
-game.player_board_print()
-game.placement_of_ships()
-game.player_board_print()
+#game.player_board_print()
+game.placement_of_ships_bot()
+game.bot_board_print()
