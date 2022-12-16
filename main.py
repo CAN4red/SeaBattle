@@ -55,7 +55,7 @@ class SeaBattle():
         self.comp_board = board
         self.flag_of_shooting1 = True
         self.flag_of_shooting2 = False
-        self.flag_of_shooting3 = True
+        self.flag_of_shooting3 = False
         self.x_shoot = 0
         self.y_shoot = 0
         self.points = points_list
@@ -855,20 +855,18 @@ class SeaBattle():
                         self.copy_of_comp_board[int(point[1]) - 1][0] = 'x'
                         self.points[int(point[1]) - 1][0] = 0
                         return True
-            elif self.comp_board[int(point[1]) - 1][0] == 3 or self.comp_board[int(point[1]) - 1][0] == 4:
-                print('Неверная точка')
-                return False
+
             else:
                 print('Промах')
                 self.comp_board[int(point[1]) - 1][0] = 4
                 self.copy_of_comp_board[int(point[1]) - 1][0] = 'o'
                 self.points[int(point[1]) - 1][0] = 0
-                return True
+                return False
 
 
         elif point[0] == 'H':
             if self.comp_board[int(point[1]) - 1][7] == 1:
-                if (int(point[1]) - 1) > 0 and int(point[1] - 1) < 7:
+                if (int(point[1]) - 1) > 0 and (int(point[1]) - 1) < 7:
                     if self.comp_board[int(point[1]) - 2][7] != 1 and self.comp_board[int(point[1])][7] != 1 and \
                             self.comp_board[int(point[1]) - 1][6] != 1:
                         print('Убит')
@@ -895,7 +893,7 @@ class SeaBattle():
                         self.copy_of_comp_board[int(point[1]) - 1][7] = 'x'
                         self.points[int(point[1]) - 1][7] = 0
                         return True
-                elif int(point[1] - 1) == 7:
+                elif (int(point[1]) - 1) == 7:
                     if self.comp_board[int(point[1]) - 2][7] != 1 and self.comp_board[int(point[1]) - 1][6] != 1:
                         print('Убит')
                         self.comp_board[int(point[1]) - 1][7] = 3
@@ -908,15 +906,13 @@ class SeaBattle():
                         self.copy_of_comp_board[int(point[1]) - 1][7] = 'x'
                         self.points[int(point[1]) - 1][7] = 0
                         return True
-            elif self.comp_board[int(point[1]) - 1][7] == 3 or self.comp_board[int(point[1]) - 1][7] == 4:
-                print('Неверная точка')
-                return False
+
             else:
                 print('Промах')
                 self.comp_board[int(point[1]) - 1][7] = 4
                 self.copy_of_comp_board[int(point[1]) - 1][7] = 'o'
                 self.points[int(point[1]) - 1][7] = 0
-                return True
+                return False
 
 
         else:
@@ -952,7 +948,7 @@ class SeaBattle():
                                 self.copy_of_comp_board[int(point[1]) - 1][count_let] = 'x'
                                 self.points[int(point[1]) - 1][count_let] = 0
                                 return True
-                        elif int(point[1] - 1) == 7:
+                        elif (int(point[1]) - 1) == 7:
                             if self.comp_board[int(point[1]) - 2][count_let] != 1 and self.comp_board[int(point[1]) - 1][count_let + 1] != 1 and self.comp_board[int(point[1]) - 1][count_let - 1] != 1:
                                 print('Убит')
                                 self.comp_board[int(point[1]) - 1][count_let] = 3
@@ -965,15 +961,13 @@ class SeaBattle():
                                 self.copy_of_comp_board[int(point[1]) - 1][count_let] = 'x'
                                 self.points[int(point[1]) - 1][count_let] = 0
                                 return True
-                    elif self.comp_board[int(point[1]) - 1][count_let] == 3 or self.comp_board[int(point[1]) - 1][count_let] == 4:
-                        print('Неверная точка')
-                        return False
+
                     else:
                         print('Промах')
                         self.comp_board[int(point[1]) - 1][count_let] = 4
                         self.copy_of_comp_board[int(point[1]) - 1][count_let] = 'o'
                         self.points[int(point[1]) - 1][count_let] = 0
-                        return True
+                        return False
 
 
     def copy_of_comp_board_print(self):  # вывод известной информации о столе компьютера
@@ -1039,31 +1033,36 @@ class SeaBattle():
 
         def check_of_location(i, j):  # определяет область на которой запрещено будет ставить корабли
             if self.copy_of_player_board[i][j] == 3:
+                flag_of_location = False
                 try:
                     if self.copy_of_player_board[i + 1][j] == 1:
-                        return True
-                    else: return False
+                        flag_of_location = True
+                    else: flag_of_location = False
                 except:
                     pass
                 try:
                     if self.copy_of_player_board[i][j + 1] == 1:
-                        return True
-                    else: return False
+                        flag_of_location = True
+                    else: flag_of_location = False
                 except:
                     pass
                 try:
                     if self.copy_of_player_board[i - 1][j] == 1 and (i - 1 >= 0):
-                        return True
-                    else: return False
+                        flag_of_location = True
+                    else: flag_of_location = False
                 except:
                     pass
                 try:
                     if self.copy_of_player_board[i][j - 1] == 1 and (j - 1 >= 0):
-                        return True
-                    else: return False
+                        flag_of_location =True
+                    else: flag_of_location = False
                 except:
                     pass
-                try:
+                if flag_of_location:
+                    return True
+                elif not flag_of_location:
+                    return False
+                '''try:
                     if self.copy_of_player_board[i + 1][j + 1] == 1:
                         return True
                     else: return False
@@ -1086,9 +1085,9 @@ class SeaBattle():
                         return True
                     else: return False
                 except:
-                    pass
+                    pass'''
 
-
+        global special_flag
         def shoot_the_ships(x, y):
             if self.copy_of_player_board[x][y] == 1:
                 flag_dir1 = False
@@ -1099,12 +1098,14 @@ class SeaBattle():
                 self.player_board[x][y] = '**'
                 flag_dir = True
                 while flag_dir:
+                    if not check_of_location(x, y):
+                        break
                     direction = randint(1, 4)
                     if direction == 1:
                         try:
                             if x+1 >= 7:
                                 raise Exception
-                            elif self.copy_of_player_board[x+1][y] == 4:
+                            elif self.copy_of_player_board[x+1][y] == 4 or self.copy_of_player_board[x+1][y] == 3:
                                 flag_dir1 = True
                             else:
                                 if self.copy_of_player_board[x+1][y] == 1:
@@ -1146,7 +1147,7 @@ class SeaBattle():
                         try:
                             if y + 1 >= 7:
                                 raise Exception
-                            elif self.copy_of_player_board[x][y+1] == 4:
+                            elif self.copy_of_player_board[x][y+1] == 4 or self.copy_of_player_board[x][y+1] == 3:
                                 flag_dir2 = True
                             else:
                                 if self.copy_of_player_board[x][y+1] == 1:
@@ -1191,7 +1192,7 @@ class SeaBattle():
                         try:
                             if x - 1 < 0:
                                 raise Exception
-                            elif self.copy_of_player_board[x-1][y] == 4:
+                            elif self.copy_of_player_board[x-1][y] == 4 or self.copy_of_player_board[x-1][y] == 3:
                                 flag_dir3 = True
                             else:
                                 if self.copy_of_player_board[x - 1][y] == 1:
@@ -1236,7 +1237,7 @@ class SeaBattle():
                         try:
                             if y - 1 < 0:
                                 raise Exception
-                            elif self.copy_of_player_board[x][y-1] == 4:
+                            elif self.copy_of_player_board[x][y-1] == 4 or self.copy_of_player_board[x][y-1] == 3:
                                 flag_dir4 = True
                             else:
                                 if self.copy_of_player_board[x][y - 1] == 1:
@@ -1276,27 +1277,22 @@ class SeaBattle():
                         except (Exception, IndexError):
                             flag_dir = True
 
-                    if flag_dir1 and flag_dir2 and flag_dir3 and flag_dir4:
-                        break
             else:
                 self.copy_of_player_board[x][y] = 4
                 self.player_board[x][y] = '**'
 
 
 
-        if self.flag_of_shooting1 == self.flag_of_shooting2 == False and self.flag_of_shooting3 == True:
-            self.x_shoot = 4
-            self.y_shoot = 0
-            self.flag_of_shooting2 = True
-        elif self.flag_of_shooting1 == self.flag_of_shooting2 == self.flag_of_shooting3 == False:
-            self.x_shoot = 0
-            self.y_shoot = 4
-            self.flag_of_shooting3 = True
+
         x_cord = self.x_shoot
         y_cord = self.y_shoot
         shoot_the_ships(x_cord, y_cord)
-        while check_of_location(x_cord, y_cord):
+        print(x_cord, y_cord)
+        while check_of_location(x_cord, y_cord) and shoot_the_ships(x_cord, y_cord):
             shoot_the_ships(x_cord, y_cord)
+            print(x_cord, y_cord)
+
+
 
         if self.flag_of_shooting1:
             try:
@@ -1306,6 +1302,10 @@ class SeaBattle():
                 self.y_shoot += 1
             except Exception:
                 self.flag_of_shooting1 = False
+                self.flag_of_shooting2 = True
+                self.x_shoot = 4
+                self.y_shoot = 0
+
 
         elif self.flag_of_shooting2:
             try:
@@ -1315,6 +1315,9 @@ class SeaBattle():
                 self.y_shoot += 1
             except Exception:
                 self.flag_of_shooting2 = False
+                self.flag_of_shooting3 = True
+                self.x_shoot = 0
+                self.y_shoot = 4
 
         elif self.flag_of_shooting3:
             try:
@@ -1324,25 +1327,55 @@ class SeaBattle():
                 self.y_shoot += 1
             except Exception:
                 self.flag_of_shooting3 = False
-                self.flag_of_shooting1 = True
+                ls = []
+                for i in range(len(self.copy_of_player_board)):
+                    for j in range(len(self.copy_of_player_board[i])):
+                        if self.copy_of_player_board[i][j] == 0 or self.copy_of_player_board[i][j] == 1:
+                            ls.append([i, j])
+                rand = randint(0, len(ls)-1)
+                self.x_shoot = ls[rand][0]
+                self.y_shoot = ls[rand][1]
 
-        elif not self.flag_of_shooting2 and not self.flag_of_shooting3 and self.flag_of_shooting1:
-            while self.copy_of_player_board[self.x_shoot][self.y_shoot] != 0 or self.copy_of_player_board[self.x_shoot][self.y_shoot] != 1:
-                self.x_shoot = randint(0, 7)
-                self.y_shoot = randint(0, 7)
+        elif not self.flag_of_shooting2 and not self.flag_of_shooting3 and not self.flag_of_shooting1:
+            ls = []
+            for i in range(len(self.copy_of_player_board)):
+                for j in range(len(self.copy_of_player_board[i])):
+                    if self.copy_of_player_board[i][j] == 0 or self.copy_of_player_board[i][j] == 1:
+                        ls.append([i, j])
+            rand = randint(0, len(ls)-1)
+            self.x_shoot = ls[rand][0]
+            self.y_shoot = ls[rand][1]
+
+
+
+
+        '''if self.flag_of_shooting1 == self.flag_of_shooting2 == False and self.flag_of_shooting3 == True:
+            self.x_shoot = 4
+            self.y_shoot = 0
+            self.flag_of_shooting2 = True
+        elif self.flag_of_shooting1 == self.flag_of_shooting2 == self.flag_of_shooting3 == False:
+            self.x_shoot = 0
+            self.y_shoot = 4
+            self.flag_of_shooting3 = True'''
+
 
 
     def game_over(self):
+        flag1 = True
+        flag2 = True
         for i in range(len(self.copy_of_player_board)):
             for j in range(len(self.copy_of_player_board[i])):
                 if self.copy_of_player_board[i][j] == 1:
-                    return False
+                    flag1 = False
 
-        for i in range(len(self.copy_of_comp_board)):
-            for j in range(len(self.copy_of_comp_board[i])):
-                if self.copy_of_comp_board[i][j] == 1:
-                    return False
-        return True
+        for i in range(len(self.comp_board)):
+            for j in range(len(self.comp_board[i])):
+                if self.comp_board[i][j] == 1:
+                    flag2 = False
+        if flag2 or flag1:
+            return True
+        else:
+            return False
 
     def who_won(self):
         flag_player = True
@@ -1356,9 +1389,9 @@ class SeaBattle():
                 if self.comp_board[i][j] == 1:
                     flag_bot = False
         if flag_player:
-            print('Вы победили')
-        elif flag_bot:
             print('Вы проиграли')
+        elif flag_bot:
+            print('Вы победили')
         else: print('Произошло недоразумение :(')
 
 
@@ -1378,14 +1411,16 @@ while not game.game_over():
     game.copy_of_comp_board_print()
     print()
     a = input("Введите точку, по которой хотите выстреллить: ")
-    while not game.check_point(a):
-        print('Ай, косячим!')
+    while (not game.check_point(a) or game.player_shoot(a)):
         a = input("Введите точку, по которой хотите выстреллить: ")
+        if game.game_over():
+            break
     #time.sleep(0.5)
-    game.player_shoot(a)
+    #game.player_shoot(a)
     if game.game_over():
         break
     game.bot_shoot()
+
     game.player_board_print()
     print()
 
