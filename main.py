@@ -1,4 +1,5 @@
 import string
+import time
 from operator import xor
 from random import randint
 
@@ -24,17 +25,40 @@ bot_board = [
     [0, 0, 0, 0, 0, 0, 0, 0]
 ]
 
+point_board = [
+    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    ]
+
+points_list = [
+    ['A1', 'B1', 'C1', 'D1', 'E1', 'F1', 'G1', 'H1'],
+    ['A2', 'B2', 'C2', 'D2', 'E2', 'F2', 'G2', 'H2'],
+    ['A3', 'B3', 'C3', 'D3', 'E3', 'F3', 'G3', 'H3'],
+    ['A4', 'B4', 'C4', 'D4', 'E4', 'F4', 'G4', 'H4'],
+    ['A5', 'B5', 'C5', 'D5', 'E5', 'F5', 'G5', 'H5'],
+    ['A6', 'B6', 'C6', 'D6', 'E6', 'F6', 'G6', 'H6'],
+    ['A7', 'B7', 'C7', 'D7', 'E7', 'F7', 'G7', 'H7'],
+    ['A8', 'B8', 'C8', 'D8', 'E8', 'F8', 'G8', 'H8'],
+]
+
 class SeaBattle():
-    def __init__(self, player_board, copy_of_player_board, copy_of_comp_board, comp_board, flag_of_shooting1, flag_of_shooting2, flag_of_shooting3, x_shoot, y_shoot):
+    def __init__(self, player_board, copy_of_player_board, copy_of_comp_board, comp_board, flag_of_shooting1, flag_of_shooting2, flag_of_shooting3, x_shoot, y_shoot, points):
         self.player_board = board
         self.copy_of_player_board = board
         self.copy_of_comp_board = board
         self.comp_board = board
         self.flag_of_shooting1 = True
         self.flag_of_shooting2 = False
-        self.flag_of_shooting3 = False
+        self.flag_of_shooting3 = True
         self.x_shoot = 0
         self.y_shoot = 0
+        self.points = points_list
 
     def player_board_print(self):  # вывод стола игрока
         st = '  '
@@ -292,7 +316,7 @@ class SeaBattle():
 
         self.copy_of_player_board = [
             [1, 0, 0, 0, 0, 0, 1, 0],
-            [1, 0, 1, 1, 0, 0, 1, 0],
+            [1, 0, 0, 0, 0, 0, 1, 0],
             [1, 0, 0, 0, 0, 1, 0, 0],
             [0, 0, 1, 1, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 1, 0],
@@ -302,7 +326,7 @@ class SeaBattle():
         ]
 
         self.comp_board = bot_board
-        self.copy_of_comp_board = bot_board
+        self.copy_of_comp_board = point_board
         def Zero_to_Two():  # определяет область на которой запрещено будет ставить корабли
             for i in range(len(self.comp_board)):
                 for j in range(len(self.comp_board[i])):
@@ -776,21 +800,6 @@ class SeaBattle():
                 main_flag = False
 
 
-
-
-                # ◙░▒▓█
-        """for i in range(len(self.comp_board)):
-            for j in range(len(self.comp_board[i])):
-                if self.comp_board[i][j] == 0:
-                    self.comp_board[i][j] = '░░'
-                elif self.comp_board[i][j] == 1:
-                    self.comp_board[i][j] = '██'
-                elif self.comp_board[i][j] == 2:
-                    self.comp_board[i][j] = '▒▒'"""
-
-
-
-
     def bot_board_print(self):  # вывод стола игрока
         st = ''
         k = 1
@@ -799,7 +808,7 @@ class SeaBattle():
 
     def check_point(self, point):
         if len(point) == 2:
-            if point[0] in string.ascii_uppercase[:8] and point[1] in '12345678':
+            if point[0] in string.ascii_uppercase[:8] and point[1] in '12345678' and (point in self.points[0] or point in self.points[1] or point in self.points[2] or point in self.points[3] or point in self.points[4] or point in self.points[5] or point in self.points[6] or point in self.points[7]):
                 return True
         else: return False
 
@@ -807,47 +816,54 @@ class SeaBattle():
     def player_shoot(self, point): # 3 - попал    4 - промах
         if point[0] == 'A':
             if self.comp_board[int(point[1]) - 1][0] == 1:
-                if (int(point[1]) - 1) > 0 and int(point[1] - 1) < 7:
+                if (int(point[1]) - 1) > 0 and (int(point[1]) - 1) < 7:
                     if self.comp_board[int(point[1]) - 2][0] != 1 and self.comp_board[int(point[1])][0] != 1 and self.comp_board[int(point[1]) - 1][1] != 1:
                         print('Убит')
                         self.comp_board[int(point[1]) - 1][0] = 3
                         self.copy_of_comp_board[int(point[1]) - 1][0] = 'x'
+                        self.points[int(point[1]) - 1][0] = 0
                         return True
                     else:
                         print('Ранен')
                         self.comp_board[int(point[1]) - 1][0] = 3
                         self.copy_of_comp_board[int(point[1]) - 1][0] = 'x'
+                        self.points[int(point[1]) - 1][0] = 0
                         return True
                 elif (int(point[1]) - 1) == 0:
                     if self.comp_board[int(point[1])][0] != 1 and self.comp_board[int(point[1]) - 1][1] != 1:
                         print('Убит')
                         self.comp_board[int(point[1]) - 1][0] = 3
                         self.copy_of_comp_board[int(point[1]) - 1][0] = 'x'
+                        self.points[int(point[1]) - 1][0] = 0
                         return True
                     else:
                         print('Ранен')
                         self.comp_board[int(point[1]) - 1][0] = 3
                         self.copy_of_comp_board[int(point[1]) - 1][0] = 'x'
+                        self.points[int(point[1]) - 1][0] = 0
                         return True
-                elif int(point[1] - 1) == 7:
+                elif (int(point[1]) - 1) == 7:
                     if self.comp_board[int(point[1]) - 2][0] != 1 and self.comp_board[int(point[1]) - 1][1] != 1:
                         print('Убит')
                         self.comp_board[int(point[1]) - 1][0] = 3
                         self.copy_of_comp_board[int(point[1]) - 1][0] = 'x'
+                        self.points[int(point[1]) - 1][0] = 0
                         return True
                     else:
                         print('Ранен')
                         self.comp_board[int(point[1]) - 1][0] = 3
                         self.copy_of_comp_board[int(point[1]) - 1][0] = 'x'
+                        self.points[int(point[1]) - 1][0] = 0
                         return True
             elif self.comp_board[int(point[1]) - 1][0] == 3 or self.comp_board[int(point[1]) - 1][0] == 4:
                 print('Неверная точка')
-                return True
+                return False
             else:
                 print('Промах')
                 self.comp_board[int(point[1]) - 1][0] = 4
                 self.copy_of_comp_board[int(point[1]) - 1][0] = 'o'
-                return False
+                self.points[int(point[1]) - 1][0] = 0
+                return True
 
 
         elif point[0] == 'H':
@@ -858,42 +874,49 @@ class SeaBattle():
                         print('Убит')
                         self.comp_board[int(point[1]) - 1][7] = 3
                         self.copy_of_comp_board[int(point[1]) - 1][7] = 'x'
+                        self.points[int(point[1]) - 1][7] = 0
                         return True
                     else:
                         print('Ранен')
                         self.comp_board[int(point[1]) - 1][7] = 3
                         self.copy_of_comp_board[int(point[1]) - 1][7] = 'x'
+                        self.points[int(point[1]) - 1][7] = 0
                         return True
                 elif (int(point[1]) - 1) == 0:
                     if self.comp_board[int(point[1])][0] != 1 and self.comp_board[int(point[1]) - 1][6] != 1:
                         print('Убит')
                         self.comp_board[int(point[1]) - 1][7] = 3
                         self.copy_of_comp_board[int(point[1]) - 1][7] = 'x'
+                        self.points[int(point[1]) - 1][7] = 0
                         return True
                     else:
                         print('Ранен')
                         self.comp_board[int(point[1]) - 1][7] = 3
                         self.copy_of_comp_board[int(point[1]) - 1][7] = 'x'
+                        self.points[int(point[1]) - 1][7] = 0
                         return True
                 elif int(point[1] - 1) == 7:
                     if self.comp_board[int(point[1]) - 2][7] != 1 and self.comp_board[int(point[1]) - 1][6] != 1:
                         print('Убит')
                         self.comp_board[int(point[1]) - 1][7] = 3
                         self.copy_of_comp_board[int(point[1]) - 1][7] = 'x'
+                        self.points[int(point[1]) - 1][7] = 0
                         return True
                     else:
                         print('Ранен')
                         self.comp_board[int(point[1]) - 1][7] = 3
                         self.copy_of_comp_board[int(point[1]) - 1][7] = 'x'
+                        self.points[int(point[1]) - 1][7] = 0
                         return True
             elif self.comp_board[int(point[1]) - 1][7] == 3 or self.comp_board[int(point[1]) - 1][7] == 4:
                 print('Неверная точка')
-                return True
+                return False
             else:
                 print('Промах')
                 self.comp_board[int(point[1]) - 1][7] = 4
                 self.copy_of_comp_board[int(point[1]) - 1][7] = 'o'
-                return False
+                self.points[int(point[1]) - 1][7] = 0
+                return True
 
 
         else:
@@ -908,47 +931,63 @@ class SeaBattle():
                                 print('Убит')
                                 self.comp_board[int(point[1]) - 1][count_let] = 3
                                 self.copy_of_comp_board[int(point[1]) - 1][count_let] = 'x'
+                                self.points[int(point[1]) - 1][count_let] = 0
                                 return True
                             else:
                                 print('Ранен')
                                 self.comp_board[int(point[1]) - 1][count_let] = 3
                                 self.copy_of_comp_board[int(point[1]) - 1][count_let] = 'x'
+                                self.points[int(point[1]) - 1][count_let] = 0
                                 return True
                         elif (int(point[1]) - 1) == 0:
                             if self.comp_board[int(point[1])][count_let] != 1 and self.comp_board[int(point[1]) - 1][count_let + 1] != 1 and self.comp_board[int(point[1]) - 1][count_let - 1] != 1:
                                 print('Убит')
                                 self.comp_board[int(point[1]) - 1][count_let] = 3
                                 self.copy_of_comp_board[int(point[1]) - 1][count_let] = 'x'
+                                self.points[int(point[1]) - 1][count_let] = 0
                                 return True
                             else:
                                 print('Ранен')
                                 self.comp_board[int(point[1]) - 1][count_let] = 3
                                 self.copy_of_comp_board[int(point[1]) - 1][count_let] = 'x'
+                                self.points[int(point[1]) - 1][count_let] = 0
                                 return True
                         elif int(point[1] - 1) == 7:
                             if self.comp_board[int(point[1]) - 2][count_let] != 1 and self.comp_board[int(point[1]) - 1][count_let + 1] != 1 and self.comp_board[int(point[1]) - 1][count_let - 1] != 1:
                                 print('Убит')
                                 self.comp_board[int(point[1]) - 1][count_let] = 3
                                 self.copy_of_comp_board[int(point[1]) - 1][count_let] = 'x'
+                                self.points[int(point[1]) - 1][count_let] = 0
                                 return True
                             else:
                                 print('Ранен')
                                 self.comp_board[int(point[1]) - 1][count_let] = 3
                                 self.copy_of_comp_board[int(point[1]) - 1][count_let] = 'x'
+                                self.points[int(point[1]) - 1][count_let] = 0
                                 return True
                     elif self.comp_board[int(point[1]) - 1][count_let] == 3 or self.comp_board[int(point[1]) - 1][count_let] == 4:
                         print('Неверная точка')
-                        return True
+                        return False
                     else:
                         print('Промах')
                         self.comp_board[int(point[1]) - 1][count_let] = 4
                         self.copy_of_comp_board[int(point[1]) - 1][count_let] = 'o'
-                        return False
+                        self.points[int(point[1]) - 1][count_let] = 0
+                        return True
 
 
     def copy_of_comp_board_print(self):  # вывод известной информации о столе компьютера
-        for i in self.copy_of_comp_board:
-            print(*i)
+        st = ' '
+        k = 1
+        for i in string.ascii_uppercase[:8]:
+            st += ' | ' + i
+        print(st + ' |')
+        for i in range(len(self.copy_of_comp_board)):
+            st = str(k)
+            for j in range(len(self.copy_of_comp_board[i])):
+                st += ' | ' + self.copy_of_comp_board[i][j]
+            k += 1
+            print(st + ' |')
 
     def bot_shoot(self):
 
@@ -1086,7 +1125,7 @@ class SeaBattle():
                                                     flag_dir = False
                                                 elif self.copy_of_player_board[x + 3][y] == 0:
                                                     self.copy_of_player_board[x + 3][y] = 4
-                                                    self.player_board[x + 4][y] = '**'
+                                                    self.player_board[x + 3][y] = '**'
                                                     flag_dir = False
                                                 else: flag_dir = True
                                         elif self.copy_of_player_board[x + 2][y] == 0:
@@ -1241,20 +1280,18 @@ class SeaBattle():
                         break
             else:
                 self.copy_of_player_board[x][y] = 4
+                self.player_board[x][y] = '**'
 
 
-        print()
-        for i in self.copy_of_player_board:
-            print(*i)
 
-        if self.flag_of_shooting1 == self.flag_of_shooting2 == False:
+        if self.flag_of_shooting1 == self.flag_of_shooting2 == False and self.flag_of_shooting3 == True:
             self.x_shoot = 4
             self.y_shoot = 0
-            flag_of_shooting2 = True
+            self.flag_of_shooting2 = True
         elif self.flag_of_shooting1 == self.flag_of_shooting2 == self.flag_of_shooting3 == False:
             self.x_shoot = 0
             self.y_shoot = 4
-            flag_of_shooting3 = True
+            self.flag_of_shooting3 = True
         x_cord = self.x_shoot
         y_cord = self.y_shoot
         shoot_the_ships(x_cord, y_cord)
@@ -1263,37 +1300,37 @@ class SeaBattle():
 
         if self.flag_of_shooting1:
             try:
+                if self.x_shoot + 1 > 7 or self.y_shoot + 1 > 7:
+                    raise Exception
                 self.x_shoot += 1
                 self.y_shoot += 1
-            except:
+            except Exception:
                 self.flag_of_shooting1 = False
 
         elif self.flag_of_shooting2:
             try:
+                if self.x_shoot + 1 > 7 or self.y_shoot + 1 > 7:
+                    raise Exception
                 self.x_shoot += 1
                 self.y_shoot += 1
-            except:
+            except Exception:
                 self.flag_of_shooting2 = False
 
         elif self.flag_of_shooting3:
             try:
+                if self.x_shoot + 1 > 7 or self.y_shoot + 1 > 7:
+                    raise Exception
                 self.x_shoot += 1
                 self.y_shoot += 1
-            except:
+            except Exception:
                 self.flag_of_shooting3 = False
+                self.flag_of_shooting1 = True
 
-        elif not self.flag_of_shooting2 and not self.flag_of_shooting3 and not self.flag_of_shooting1:
+        elif not self.flag_of_shooting2 and not self.flag_of_shooting3 and self.flag_of_shooting1:
             while self.copy_of_player_board[self.x_shoot][self.y_shoot] != 0 or self.copy_of_player_board[self.x_shoot][self.y_shoot] != 1:
-                x_shoot = randint(0, 7)
-                y_shoot = randint(0, 7)
+                self.x_shoot = randint(0, 7)
+                self.y_shoot = randint(0, 7)
 
-
-
-
-
-        print()
-        for i in self.copy_of_player_board:
-            print(*i)
 
     def game_over(self):
         for i in range(len(self.copy_of_player_board)):
@@ -1314,9 +1351,9 @@ class SeaBattle():
             for j in range(len(self.copy_of_player_board[i])):
                 if self.copy_of_player_board[i][j] == 1:
                     flag_player = False
-        for i in range(len(self.copy_of_comp_board)):
-            for j in range(len(self.copy_of_comp_board[i])):
-                if self.copy_of_comp_board[i][j] == 1:
+        for i in range(len(self.comp_board)):
+            for j in range(len(self.comp_board[i])):
+                if self.comp_board[i][j] == 1:
                     flag_bot = False
         if flag_player:
             print('Вы победили')
@@ -1331,11 +1368,25 @@ class SeaBattle():
 
 
 
-
-game = SeaBattle(board, board, board, board, True, False, False, 0, 0)
-#game.player_board_print()
+game = SeaBattle(board, board, board, board, True, False, True, 0, 0, points_list)
+game.player_board_print()
+#game.placement_of_ships()
 game.placement_of_ships_bot()
-game.bot_board_print()
-game.bot_shoot()
+game.player_board_print()
 print()
-#game.copy_of_comp_board_print()
+while not game.game_over():
+    game.copy_of_comp_board_print()
+    print()
+    a = input("Введите точку, по которой хотите выстреллить: ")
+    while not game.check_point(a):
+        print('Ай, косячим!')
+        a = input("Введите точку, по которой хотите выстреллить: ")
+    #time.sleep(0.5)
+    game.player_shoot(a)
+    if game.game_over():
+        break
+    game.bot_shoot()
+    game.player_board_print()
+    print()
+
+game.who_won()
