@@ -1328,6 +1328,7 @@ while not game.game_over():
     a = input("Введите точку, по которой хотите выстреллить: ")
     while (not game.check_point(a) or game.player_shoot(a)):
         a = input("Введите точку, по которой хотите выстреллить: ")
+        game.copy_of_comp_board_print()
         if game.game_over():
             break
     if game.game_over():
