@@ -81,14 +81,14 @@ class SeaBattle():
             [0, 0, 0, 0, 0, 0, 0, 0]
         ]
         self.copy_of_comp_board = [
-            [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-            [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-            [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-            [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-            [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-            [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-            [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-            [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+            ['░░', '░░', '░░', '░░', '░░', '░░', '░░', '░░'],
+            ['░░', '░░', '░░', '░░', '░░', '░░', '░░', '░░'],
+            ['░░', '░░', '░░', '░░', '░░', '░░', '░░', '░░'],
+            ['░░', '░░', '░░', '░░', '░░', '░░', '░░', '░░'],
+            ['░░', '░░', '░░', '░░', '░░', '░░', '░░', '░░'],
+            ['░░', '░░', '░░', '░░', '░░', '░░', '░░', '░░'],
+            ['░░', '░░', '░░', '░░', '░░', '░░', '░░', '░░'],
+            ['░░', '░░', '░░', '░░', '░░', '░░', '░░', '░░'],
         ]
         self.comp_board = [
             [0, 0, 0, 0, 0, 0, 0, 0],
@@ -130,6 +130,19 @@ class SeaBattle():
                 st += ' ' + self.copy_of_comp_board[i][j]
             k += 1
         return st
+
+    '''def copy_of_comp_board_print(self):  # вывод стола игрока
+        st = '\xa0\xa0\xa0'
+        k = 1
+        for i in string.ascii_uppercase[:8]:
+            st += ' \xa0\xa0\xa0\xa0\xa0' + i
+        for i in range(len(self.copy_of_comp_board)):
+            st += '\n' + str(k)
+            for j in range(len(self.copy_of_comp_board[i])):
+                st += '\xa0\xa0\xa0|\xa0\xa0\xa0' + self.copy_of_comp_board[i][j]
+            st += '\xa0\xa0\xa0|'
+            k += 1
+        return st'''
 
     def placement(self, point):  # функция отвечающая за перевод координат в индексы матрицы и постановку в соотвествующую позицию символ
         if point[0] == 'A':
@@ -751,39 +764,39 @@ class SeaBattle():
                     if self.comp_board[int(point[1]) - 2][0] != 1 and self.comp_board[int(point[1])][0] != 1 and self.comp_board[int(point[1]) - 1][1] != 1:
                         mes = 'Убит'
                         self.comp_board[int(point[1]) - 1][0] = 3
-                        self.copy_of_comp_board[int(point[1]) - 1][0] = 'x'
+                        self.copy_of_comp_board[int(point[1]) - 1][0] = '██'
                         self.points[int(point[1]) - 1][0] = 0
                     else:
                         self.comp_board[int(point[1]) - 1][0] = 3
-                        self.copy_of_comp_board[int(point[1]) - 1][0] = 'x'
+                        self.copy_of_comp_board[int(point[1]) - 1][0] = '██'
                         self.points[int(point[1]) - 1][0] = 0
                 elif (int(point[1]) - 1) == 0:
                     if self.comp_board[int(point[1])][0] != 1 and self.comp_board[int(point[1]) - 1][1] != 1:
                         mes = 'Убит'
                         self.comp_board[int(point[1]) - 1][0] = 3
-                        self.copy_of_comp_board[int(point[1]) - 1][0] = 'x'
+                        self.copy_of_comp_board[int(point[1]) - 1][0] = '██'
                         self.points[int(point[1]) - 1][0] = 0
                     else:
                         mes = 'Ранен'
                         self.comp_board[int(point[1]) - 1][0] = 3
-                        self.copy_of_comp_board[int(point[1]) - 1][0] = 'x'
+                        self.copy_of_comp_board[int(point[1]) - 1][0] = '██'
                         self.points[int(point[1]) - 1][0] = 0
                 elif (int(point[1]) - 1) == 7:
                     if self.comp_board[int(point[1]) - 2][0] != 1 and self.comp_board[int(point[1]) - 1][1] != 1:
                         mes = 'Убит'
                         self.comp_board[int(point[1]) - 1][0] = 3
-                        self.copy_of_comp_board[int(point[1]) - 1][0] = 'x'
+                        self.copy_of_comp_board[int(point[1]) - 1][0] = '██'
                         self.points[int(point[1]) - 1][0] = 0
                     else:
                         mes = 'Ранен'
                         self.comp_board[int(point[1]) - 1][0] = 3
-                        self.copy_of_comp_board[int(point[1]) - 1][0] = 'x'
+                        self.copy_of_comp_board[int(point[1]) - 1][0] = '██'
                         self.points[int(point[1]) - 1][0] = 0
 
             elif self.comp_board[int(point[1]) - 1][0] == 0 or self.comp_board[int(point[1]) - 1][0] == 2:
                 mes = 'Промах'
                 self.comp_board[int(point[1]) - 1][0] = 4
-                self.copy_of_comp_board[int(point[1]) - 1][0] = 'o'
+                self.copy_of_comp_board[int(point[1]) - 1][0] = '▒▒'
                 self.points[int(point[1]) - 1][0] = 0
             else:
                 mes = 'Неверная координата'
@@ -796,40 +809,40 @@ class SeaBattle():
                             self.comp_board[int(point[1]) - 1][6] != 1:
                         mes = 'Убит'
                         self.comp_board[int(point[1]) - 1][7] = 3
-                        self.copy_of_comp_board[int(point[1]) - 1][7] = 'x'
+                        self.copy_of_comp_board[int(point[1]) - 1][7] = '██'
                         self.points[int(point[1]) - 1][7] = 0
                     else:
                         mes = 'Ранен'
                         self.comp_board[int(point[1]) - 1][7] = 3
-                        self.copy_of_comp_board[int(point[1]) - 1][7] = 'x'
+                        self.copy_of_comp_board[int(point[1]) - 1][7] = '██'
                         self.points[int(point[1]) - 1][7] = 0
                 elif (int(point[1]) - 1) == 0:
                     if self.comp_board[int(point[1])][0] != 1 and self.comp_board[int(point[1]) - 1][6] != 1:
                         mes = 'Убит'
                         self.comp_board[int(point[1]) - 1][7] = 3
-                        self.copy_of_comp_board[int(point[1]) - 1][7] = 'x'
+                        self.copy_of_comp_board[int(point[1]) - 1][7] = '██'
                         self.points[int(point[1]) - 1][7] = 0
                     else:
                         mes = 'Ранен'
                         self.comp_board[int(point[1]) - 1][7] = 3
-                        self.copy_of_comp_board[int(point[1]) - 1][7] = 'x'
+                        self.copy_of_comp_board[int(point[1]) - 1][7] = '██'
                         self.points[int(point[1]) - 1][7] = 0
                 elif (int(point[1]) - 1) == 7:
                     if self.comp_board[int(point[1]) - 2][7] != 1 and self.comp_board[int(point[1]) - 1][6] != 1:
                         mes = 'Убит'
                         self.comp_board[int(point[1]) - 1][7] = 3
-                        self.copy_of_comp_board[int(point[1]) - 1][7] = 'x'
+                        self.copy_of_comp_board[int(point[1]) - 1][7] = '██'
                         self.points[int(point[1]) - 1][7] = 0
                     else:
                         mes = 'Ранен'
                         self.comp_board[int(point[1]) - 1][7] = 3
-                        self.copy_of_comp_board[int(point[1]) - 1][7] = 'x'
+                        self.copy_of_comp_board[int(point[1]) - 1][7] = '██'
                         self.points[int(point[1]) - 1][7] = 0
 
             elif self.comp_board[int(point[1]) - 1][7] == 0 or self.comp_board[int(point[1]) - 1][7] == 2:
                 mes = 'Промах'
                 self.comp_board[int(point[1]) - 1][7] = 4
-                self.copy_of_comp_board[int(point[1]) - 1][7] = 'o'
+                self.copy_of_comp_board[int(point[1]) - 1][7] = '▒▒'
                 self.points[int(point[1]) - 1][7] = 0
             else:
                 mes = 'Неверная координата'
@@ -846,40 +859,40 @@ class SeaBattle():
                                     self.comp_board[int(point[1]) - 1][count_let + 1] != 1 and self.comp_board[int(point[1]) - 1][count_let - 1] != 1:
                                 mes = 'Убит'
                                 self.comp_board[int(point[1]) - 1][count_let] = 3
-                                self.copy_of_comp_board[int(point[1]) - 1][count_let] = 'x'
+                                self.copy_of_comp_board[int(point[1]) - 1][count_let] = '██'
                                 self.points[int(point[1]) - 1][count_let] = 0
                             else:
                                 mes = 'Ранен'
                                 self.comp_board[int(point[1]) - 1][count_let] = 3
-                                self.copy_of_comp_board[int(point[1]) - 1][count_let] = 'x'
+                                self.copy_of_comp_board[int(point[1]) - 1][count_let] = '██'
                                 self.points[int(point[1]) - 1][count_let] = 0
                         elif (int(point[1]) - 1) == 0:
                             if self.comp_board[int(point[1])][count_let] != 1 and self.comp_board[int(point[1]) - 1][count_let + 1] != 1 and self.comp_board[int(point[1]) - 1][count_let - 1] != 1:
                                 mes = 'Убит'
                                 self.comp_board[int(point[1]) - 1][count_let] = 3
-                                self.copy_of_comp_board[int(point[1]) - 1][count_let] = 'x'
+                                self.copy_of_comp_board[int(point[1]) - 1][count_let] = '██'
                                 self.points[int(point[1]) - 1][count_let] = 0
                             else:
                                 mes = 'Ранен'
                                 self.comp_board[int(point[1]) - 1][count_let] = 3
-                                self.copy_of_comp_board[int(point[1]) - 1][count_let] = 'x'
+                                self.copy_of_comp_board[int(point[1]) - 1][count_let] = '██'
                                 self.points[int(point[1]) - 1][count_let] = 0
                         elif (int(point[1]) - 1) == 7:
                             if self.comp_board[int(point[1]) - 2][count_let] != 1 and self.comp_board[int(point[1]) - 1][count_let + 1] != 1 and self.comp_board[int(point[1]) - 1][count_let - 1] != 1:
                                 mes = 'Убит'
                                 self.comp_board[int(point[1]) - 1][count_let] = 3
-                                self.copy_of_comp_board[int(point[1]) - 1][count_let] = 'x'
+                                self.copy_of_comp_board[int(point[1]) - 1][count_let] = '██'
                                 self.points[int(point[1]) - 1][count_let] = 0
                             else:
                                 mes = 'Ранен'
                                 self.comp_board[int(point[1]) - 1][count_let] = 3
-                                self.copy_of_comp_board[int(point[1]) - 1][count_let] = 'x'
+                                self.copy_of_comp_board[int(point[1]) - 1][count_let] = '██'
                                 self.points[int(point[1]) - 1][count_let] = 0
 
                     elif self.comp_board[int(point[1]) - 1][count_let] == 0 or self.comp_board[int(point[1]) - 1][count_let] == 2:
                         mes = 'Промах'
                         self.comp_board[int(point[1]) - 1][count_let] = 4
-                        self.copy_of_comp_board[int(point[1]) - 1][count_let] = 'o'
+                        self.copy_of_comp_board[int(point[1]) - 1][count_let] = '▒▒'
                         self.points[int(point[1]) - 1][count_let] = 0
                     else:
                         mes = 'Неверная координата'
@@ -925,7 +938,7 @@ class SeaBattle():
         def shoot_the_ships(x, y, flag):
             if self.copy_of_player_board[x][y] == 1:
                 self.copy_of_player_board[x][y] = 3
-                self.player_board[x][y] = '**'
+                self.player_board[x][y] = '*** '
                 flag_dir = True
                 while flag_dir:
                     if not check_of_location(x, y) and flag:
@@ -939,33 +952,33 @@ class SeaBattle():
                             else:
                                 if self.copy_of_player_board[x+1][y] == 1:
                                     self.copy_of_player_board[x+1][y] = 3
-                                    self.player_board[x+1][y] = '**'
+                                    self.player_board[x+1][y] = '*** '
                                     if x+2 >= 7:
                                         raise Exception
                                     else:
                                         if self.copy_of_player_board[x + 2][y] == 1:
                                             self.copy_of_player_board[x + 2][y] = 3
-                                            self.player_board[x + 2][y] = '**'
+                                            self.player_board[x + 2][y] = '*** '
                                             if x+3 >= 7:
                                                 raise Exception
                                             else:
                                                 if self.copy_of_player_board[x + 3][y] == 1:
                                                     self.copy_of_player_board[x + 3][y] = 3
-                                                    self.player_board[x + 3][y] = '**'
+                                                    self.player_board[x + 3][y] = '*** '
                                                     flag_dir = False
                                                 elif self.copy_of_player_board[x + 3][y] == 0:
                                                     self.copy_of_player_board[x + 3][y] = 4
-                                                    self.player_board[x + 3][y] = '**'
+                                                    self.player_board[x + 3][y] = '..... '
                                                     flag_dir = False
                                                 else: flag_dir = True
                                         elif self.copy_of_player_board[x + 2][y] == 0:
                                             self.copy_of_player_board[x + 2][y] = 4
-                                            self.player_board[x + 2][y] = '**'
+                                            self.player_board[x + 2][y] = '..... '
                                             flag_dir = False
                                         else: flag_dir = True
                                 elif self.copy_of_player_board[x+1][y] == 0:
                                     self.copy_of_player_board[x + 1][y] = 4
-                                    self.player_board[x + 1][y] = '**'
+                                    self.player_board[x + 1][y] = '..... '
                                     flag_dir = False
                                 else: flag_dir = True
 
@@ -980,35 +993,35 @@ class SeaBattle():
                             else:
                                 if self.copy_of_player_board[x][y+1] == 1:
                                     self.copy_of_player_board[x][y+1] = 3
-                                    self.player_board[x][y+1] = '**'
+                                    self.player_board[x][y+1] = '*** '
                                     if y + 2 >= 7:
                                         raise Exception
                                     else:
                                         if self.copy_of_player_board[x][y+2] == 1:
                                             self.copy_of_player_board[x][y+2] = 3
-                                            self.player_board[x][y + 2] = '**'
+                                            self.player_board[x][y + 2] = '*** '
                                             if y + 3 >= 7:
                                                 raise Exception
                                             else:
                                                 if self.copy_of_player_board[x][y+3] == 1:
                                                     self.copy_of_player_board[x][y+3] = 3
-                                                    self.player_board[x][y + 3] = '**'
+                                                    self.player_board[x][y + 3] = '*** '
                                                     flag_dir = False
                                                 elif self.copy_of_player_board[x][y+3] == 0:
                                                     self.copy_of_player_board[x][y+3] = 4
-                                                    self.player_board[x][y + 3] = '**'
+                                                    self.player_board[x][y + 3] = '..... '
                                                     flag_dir = False
                                                 else:
                                                     flag_dir = True
                                         elif self.copy_of_player_board[x][y+2] == 0:
                                             self.copy_of_player_board[x][y+2] = 4
-                                            self.player_board[x][y + 2] = '**'
+                                            self.player_board[x][y + 2] = '..... '
                                             flag_dir = False
                                         else:
                                             flag_dir = True
                                 elif self.copy_of_player_board[x][y+1] == 0:
                                     self.copy_of_player_board[x][y+1] = 4
-                                    self.player_board[x][y + 1] = '**'
+                                    self.player_board[x][y + 1] = '..... '
                                     flag_dir = False
                                 else:
                                     flag_dir = True
@@ -1024,35 +1037,35 @@ class SeaBattle():
                             else:
                                 if self.copy_of_player_board[x - 1][y] == 1:
                                     self.copy_of_player_board[x - 1][y] = 3
-                                    self.player_board[x - 1][y] = '**'
+                                    self.player_board[x - 1][y] = '*** '
                                     if x - 2 < 0:
                                         raise Exception
                                     else:
                                         if self.copy_of_player_board[x - 2][y] == 1:
                                             self.copy_of_player_board[x - 2][y] = 3
-                                            self.player_board[x - 2][y] = '**'
+                                            self.player_board[x - 2][y] = '*** '
                                             if x - 3 < 0:
                                                 raise Exception
                                             else:
                                                 if self.copy_of_player_board[x - 3][y] == 1:
                                                     self.copy_of_player_board[x - 3][y] = 3
-                                                    self.player_board[x - 3][y] = '**'
+                                                    self.player_board[x - 3][y] = '*** '
                                                     flag_dir = False
                                                 elif self.copy_of_player_board[x - 3][y] == 0:
                                                     self.copy_of_player_board[x - 3][y] = 4
-                                                    self.player_board[x - 3][y] = '**'
+                                                    self.player_board[x - 3][y] = '..... '
                                                     flag_dir = False
                                                 else:
                                                     flag_dir = True
                                         elif self.copy_of_player_board[x - 2][y] == 0:
                                             self.copy_of_player_board[x - 2][y] = 4
-                                            self.player_board[x - 2][y] = '**'
+                                            self.player_board[x - 2][y] = '..... '
                                             flag_dir = False
                                         else:
                                             flag_dir = True
                                 elif self.copy_of_player_board[x - 1][y] == 0:
                                     self.copy_of_player_board[x - 1][y] = 4
-                                    self.player_board[x - 1][y] = '**'
+                                    self.player_board[x - 1][y] = '..... '
                                     flag_dir = False
                                 else:
                                     flag_dir = True
@@ -1068,35 +1081,35 @@ class SeaBattle():
                             else:
                                 if self.copy_of_player_board[x][y - 1] == 1:
                                     self.copy_of_player_board[x][y - 1] = 3
-                                    self.player_board[x][y - 1] = '**'
+                                    self.player_board[x][y - 1] = '*** '
                                     if y - 2 < 0:
                                         raise Exception
                                     else:
                                         if self.copy_of_player_board[x][y - 2] == 1:
                                             self.copy_of_player_board[x][y - 2] = 3
-                                            self.player_board[x][y - 2] = '**'
+                                            self.player_board[x][y - 2] = '*** '
                                             if y - 3 < 0:
                                                 raise Exception
                                             else:
                                                 if self.copy_of_player_board[x][y - 3] == 1:
                                                     self.copy_of_player_board[x][y - 3] = 3
-                                                    self.player_board[x][y - 3] = '**'
+                                                    self.player_board[x][y - 3] = '*** '
                                                     flag_dir = False
                                                 elif self.copy_of_player_board[x][y - 3] == 0:
                                                     self.copy_of_player_board[x][y - 3] = 4
-                                                    self.player_board[x][y - 3] = '**'
+                                                    self.player_board[x][y - 3] = '..... '
                                                     flag_dir = False
                                                 else:
                                                     flag_dir = True
                                         elif self.copy_of_player_board[x][y - 2] == 0:
                                             self.copy_of_player_board[x][y - 2] = 4
-                                            self.player_board[x][y - 2] = '**'
+                                            self.player_board[x][y - 2] = '..... '
                                             flag_dir = False
                                         else:
                                             flag_dir = True
                                 elif self.copy_of_player_board[x][y - 1] == 0:
                                     self.copy_of_player_board[x][y - 1] = 4
-                                    self.player_board[x][y - 1] = '**'
+                                    self.player_board[x][y - 1] = '..... '
                                     flag_dir = False
                                 else:
                                     flag_dir = True
@@ -1105,7 +1118,7 @@ class SeaBattle():
 
             else:
                 self.copy_of_player_board[x][y] = 4
-                self.player_board[x][y] = '**'
+                self.player_board[x][y] = '..... '
 
 
         special_flag = True
@@ -1180,6 +1193,39 @@ class SeaBattle():
                 if self.copy_of_player_board[self.x_shoot][self.y_shoot] == 1:
                     special_flag = True
                 else: special_flag = False
+    def game_over(self):
+        flag1 = True
+        flag2 = True
+        for i in range(len(self.copy_of_player_board)):
+            for j in range(len(self.copy_of_player_board[i])):
+                if self.copy_of_player_board[i][j] == 1:
+                    flag1 = False
+
+        for i in range(len(self.comp_board)):
+            for j in range(len(self.comp_board[i])):
+                if self.comp_board[i][j] == 1:
+                    flag2 = False
+        if flag2 or flag1:
+            return True
+        else:
+            return False
+
+    def who_won(self):
+        flag_player = True
+        flag_bot = True
+        for i in range(len(self.copy_of_player_board)):
+            for j in range(len(self.copy_of_player_board[i])):
+                if self.copy_of_player_board[i][j] == 1:
+                    flag_player = False
+        for i in range(len(self.comp_board)):
+            for j in range(len(self.comp_board[i])):
+                if self.comp_board[i][j] == 1:
+                    flag_bot = False
+        if flag_player:
+            print('Вы проиграли')
+        elif flag_bot:
+            print('Вы победили')
+        else: print('Произошло недоразумение :(')
 
 
 global flag_of_placement
@@ -1198,6 +1244,7 @@ async def start_of_the_game(message: types.Message):
     global game
     game = SeaBattle(board, board, board, board, True, False, True, 0, 0, points_list)
     await bot.send_message(message.from_user.id, (game.player_board_print()))
+    await bot.send_message(message.from_user.id, (game.copy_of_comp_board_print()))
     await bot.send_message(message.from_user.id, 'Начинается расстановка кораблей')
     await bot.send_message(message.from_user.id, 'Начинается расстановка катеров')
     global flag_of_kat, flag_of_esm, flag_of_kre, flag_of_lin, flag_of_shoot
@@ -1206,6 +1253,7 @@ async def start_of_the_game(message: types.Message):
     flag_of_kre = True
     flag_of_lin = True
     flag_of_shoot = False
+
 
 
 @dp.message_handler()
@@ -1328,8 +1376,8 @@ async def placement_of_kat_1(message: types.Message):
             elif turn == 'Убит':
                 await bot.send_message(message.from_user.id, 'Убит')
                 await bot.send_message(message.from_user.id, (game.copy_of_comp_board_print()))
-            else:
-                await bot.send_message(message.from_user.id, turn)
+            elif turn == 'Неверная координата':
+                await bot.send_message(message.from_user.id, 'Неверная координата')
                 await bot.send_message(message.from_user.id, (game.copy_of_comp_board_print()))
 
 
