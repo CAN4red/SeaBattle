@@ -215,19 +215,12 @@ class SeaBattle():
         else:
             return False
 
-    def placement_of_ships(self, point_from_user):
-        # расстанока катеров
-        a = point_from_user
-        self._placement(a)
-        self._Zero_to_Two()
-
 
 global flag_of_placement
 flag_of_placement = False
 
 @dp.message_handler(commands=['start'])
 async def start_of_the_game(message: types.Message):
-
     global count_kat
     global count_esm
     global count_kre
@@ -242,6 +235,7 @@ async def start_of_the_game(message: types.Message):
     game = SeaBattle(board, board, board, board, True, False, True, 0, 0, points_list)
     await bot.send_message(message.from_user.id, (game.player_board_print()))
     await bot.send_message(message.from_user.id, 'Начинается расстановка кораблей')
+    await bot.send_message(message.from_user.id, 'Начинается расстановка катеров')
     global flag_of_kat, flag_of_esm, flag_of_kre, flag_of_lin
     flag_of_kat = False
     flag_of_esm = True
@@ -254,7 +248,7 @@ async def placement_of_kat_1(message: types.Message):
     if flag_of_placement:
         global flag_of_kat, flag_of_esm, flag_of_kre, flag_of_lin
         if not flag_of_kat:
-            if game.check_of_coordinates(message.text):
+            if game.check_of_coordinates(message.text) and len(message.text) <= 3:
                 game.placement(message.text)
                 game.Zero_to_Two()
                 await bot.send_message(message.from_user.id, (game.player_board_print()))
@@ -263,6 +257,7 @@ async def placement_of_kat_1(message: types.Message):
                 if count_kat == 4:
                     flag_of_kat = True
                     flag_of_esm = False
+                    await bot.send_message(message.from_user.id, 'Начинается расстановка эсмницев')
             else:
                 await bot.send_message(message.from_user.id, 'Ошибка координат!')
 
@@ -281,6 +276,36 @@ async def placement_of_kat_1(message: types.Message):
                 if count_esm == 3:
                     flag_of_esm = True
                     flag_of_kre = False
+                    await bot.send_message(message.from_user.id, 'Начинается расстановка крейсеров')
+            else:
+                await bot.send_message(message.from_user.id, 'Ошибка координат!')
+
+        elif not flag_of_kre:
+            container = message.text.split()
+            c = 'Z1'
+            for letter in string.ascii_uppercase[:8]:
+                if (container[0][0] == container[1][0]) and (abs(int(container[0][1]) - int(container[1][1])) == 2):
+                    c = container[0][0] + str(max(int(container[0][1]), int(container[1][1])) - 1)
+
+                elif (container[0][1] == container[1][1]) and (((container[0][0] + letter + container[1][0]) in string.ascii_uppercase) or (
+                        (container[1][0] + letter + container[0][0]) in string.ascii_uppercase)):
+                    c = letter + container[0][1]
+
+            if game.check_of_coordinates(container[0]) and game.check_of_coordinates(container[1]) and game.check_of_coordinates(c) and xor(
+                    (container[0][0] != container[1][0]) or (abs(int(container[0][1]) - int(container[1][1])) != 2), (container[0][1] != container[1][1] or (
+                            (container[0][0] + c[0] + container[1][0] not in string.ascii_uppercase) and (
+                            container[1][0] + c[0] + container[0][0] not in string.ascii_uppercase)))):
+                game.placement(container[0])
+                game.placement(container[1])
+                game.placement(c)
+                game.Zero_to_Two()
+                await bot.send_message(message.from_user.id, (game.player_board_print()))
+                global count_kre
+                count_kre += 1
+                if count_kre == 2:
+                    flag_of_kre = True
+                    flag_of_lin = False
+                    await bot.send_message(message.from_user.id, 'Начинается расстановка линкора')
             else:
                 await bot.send_message(message.from_user.id, 'Ошибка координат!')
     else:
