@@ -3,7 +3,7 @@ from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 from random import randint
 import string
-import time
+
 from operator import xor
 
 TOKEN = '5715751545:AAGrYQdShHpUpPgNGRVFOxZQMZ1bg51DXJI'
@@ -80,8 +80,26 @@ class SeaBattle():
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0]
         ]
-        self.copy_of_comp_board = board
-        self.comp_board = board
+        self.copy_of_comp_board = [
+            [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+            [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+            [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+            [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+            [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+            [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+            [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+            [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+        ]
+        self.comp_board = [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]
+        ]
         self.flag_of_shooting1 = True
         self.flag_of_shooting2 = False
         self.flag_of_shooting3 = False
@@ -98,6 +116,18 @@ class SeaBattle():
             st += '\n' + str(k) + ' '
             for j in range(len(self.player_board[i])):
                 st += ' ' + self.player_board[i][j]
+            k += 1
+        return st
+
+    def comp_board_print(self):  # вывод стола игрока
+        st = ' '
+        k = 1
+        for i in string.ascii_uppercase[:8]:
+            st += '     ' + i
+        for i in range(len(self.comp_board)):
+            st += '\n' + str(k) + ' '
+            for j in range(len(self.comp_board[i])):
+                st += ' ' + str(self.comp_board[i][j])
             k += 1
         return st
 
@@ -224,6 +254,495 @@ class SeaBattle():
         else:
             return False
 
+    def placement_of_ships_bot(self):  # расстановка кораблей противника
+        def Zero_to_Two_comp():  # определяет область на которой запрещено будет ставить корабли
+            for i in range(len(self.comp_board)):
+                for j in range(len(self.comp_board[i])):
+                    if self.comp_board[i][j] == 1:
+                        try:
+                            if self.comp_board[i + 1][j] == 0:
+                                self.comp_board[i + 1][j] = 2
+                        except:
+                            pass
+                        try:
+                            if self.comp_board[i][j + 1] == 0:
+                                self.comp_board[i][j + 1] = 2
+                        except:
+                            pass
+                        try:
+                            if self.comp_board[i - 1][j] == 0 and (i - 1 >= 0):
+                                self.comp_board[i - 1][j] = 2
+                        except:
+                            pass
+                        try:
+                            if self.comp_board[i][j - 1] == 0 and (j - 1 >= 0):
+                                self.comp_board[i][j - 1] = 2
+                        except:
+                            pass
+                        try:
+                            if self.comp_board[i + 1][j + 1] == 0:
+                                self.comp_board[i + 1][j + 1] = 2
+                        except:
+                            pass
+                        try:
+                            if self.comp_board[i + 1][j - 1] == 0 and (j - 1 >= 0):
+                                self.comp_board[i + 1][j - 1] = 2
+                        except:
+                            pass
+                        try:
+                            if self.comp_board[i - 1][j + 1] == 0 and (i - 1 >= 0):
+                                self.comp_board[i - 1][j + 1] = 2
+                        except:
+                            pass
+                        try:
+                            if self.comp_board[i - 1][j - 1] == 0 and (j - 1 >= 0) and (i - 1 >= 0):
+                                self.comp_board[i - 1][j - 1] = 2
+                        except:
+                            pass
+
+        '''def can_put_point(x, y):
+            if self.comp_board[x][y] == 1 or self.comp_board[x][y] == 2:
+                return True
+            else:
+                return False'''
+
+        # расставляет линкор
+        main_flag = True
+        while main_flag:
+            self.comp_board = [
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+            ]
+            a = randint(0, 7)
+            b = randint(0, 7)
+            direction = randint(1, 4)
+            if direction == 1:
+                try:
+                    self.comp_board[a][b] = 1
+                    self.comp_board[a][b + 3] = 1
+                    self.comp_board[a][b + 2] = 1
+                    self.comp_board[a][b + 1] = 1
+                except:
+                    try:
+                        self.comp_board[a][b] = 1
+                        self.comp_board[a + 3][b] = 1
+                        self.comp_board[a + 2][b] = 1
+                        self.comp_board[a + 1][b] = 1
+                    except:
+                        self.comp_board[a][b] = 1
+                        self.comp_board[a][b - 3] = 1
+                        self.comp_board[a][b - 2] = 1
+                        self.comp_board[a][b - 1] = 1
+
+            elif direction == 2:
+                try:
+                    self.comp_board[a][b] = 1
+                    self.comp_board[a + 3][b] = 1
+                    self.comp_board[a + 2][b] = 1
+                    self.comp_board[a + 1][b] = 1
+                except:
+                    try:
+                        if b - 3 < 0:
+                            raise Exception
+                        self.comp_board[a][b] = 1
+                        self.comp_board[a][b - 3] = 1
+                        self.comp_board[a][b - 2] = 1
+                        self.comp_board[a][b - 1] = 1
+                    except (Exception, IndexError):
+                        self.comp_board[a][b] = 1
+                        self.comp_board[a - 3][b] = 1
+                        self.comp_board[a - 2][b] = 1
+                        self.comp_board[a - 1][b] = 1
+
+            elif direction == 3:
+                try:
+                    if b - 3 < 0:
+                        raise Exception
+                    self.comp_board[a][b] = 1
+                    self.comp_board[a][b - 3] = 1
+                    self.comp_board[a][b - 2] = 1
+                    self.comp_board[a][b - 1] = 1
+                except (Exception, IndexError):
+                    try:
+                        if a - 3 < 0:
+                            raise Exception
+                        self.comp_board[a][b] = 1
+                        self.comp_board[a - 3][b] = 1
+                        self.comp_board[a - 2][b] = 1
+                        self.comp_board[a - 1][b] = 1
+                    except (Exception, IndexError):
+                        self.comp_board[a][b] = 1
+                        self.comp_board[a][b + 3] = 1
+                        self.comp_board[a][b + 2] = 1
+                        self.comp_board[a][b + 1] = 1
+
+            elif direction == 4:
+                try:
+                    if a - 3 < 0:
+                        raise Exception
+                    self.comp_board[a][b] = 1
+                    self.comp_board[a - 3][b] = 1
+                    self.comp_board[a - 2][b] = 1
+                    self.comp_board[a - 1][b] = 1
+                except (Exception, IndexError):
+                    try:
+                        self.comp_board[a][b] = 1
+                        self.comp_board[a][b + 3] = 1
+                        self.comp_board[a][b + 2] = 1
+                        self.comp_board[a][b + 1] = 1
+                    except:
+                        self.comp_board[a][b] = 1
+                        self.comp_board[a + 3][b] = 1
+                        self.comp_board[a + 2][b] = 1
+                        self.comp_board[a + 1][b] = 1
+            Zero_to_Two_comp()
+
+            # расставляет крейсеры
+            for i in range(2):
+                flag_cru = True
+                a = randint(0, 7)
+                b = randint(0, 7)
+                direction = randint(1, 4)
+                while flag_cru:
+                    if direction == 1:
+                        try:
+                            if self.comp_board[a][b + 2] != 0 or self.comp_board[a][b + 1] != 0 or \
+                                    self.comp_board[a][b] != 0:
+                                raise Exception
+                            self.comp_board[a][b] = 1
+                            self.comp_board[a][b + 2] = 1
+                            self.comp_board[a][b + 1] = 1
+                            flag_cru = False
+                        except (Exception, IndexError):
+                            try:
+                                if self.comp_board[a + 2][b] != 0 or self.comp_board[a + 1][b] != 0 or \
+                                        self.comp_board[a][b] != 0:
+                                    raise Exception
+                                self.comp_board[a][b] = 1
+                                self.comp_board[a + 2][b] = 1
+                                self.comp_board[a + 1][b] = 1
+                                flag_cru = False
+                            except (Exception, IndexError):
+                                try:
+                                    if self.comp_board[a][b - 2] != 0 or self.comp_board[a][b - 1] != 0 or (
+                                            b - 2 < 0) or self.comp_board[a][b] != 0:
+                                        raise Exception
+                                    self.comp_board[a][b] = 1
+                                    self.comp_board[a][b - 2] = 1
+                                    self.comp_board[a][b - 1] = 1
+                                    flag_cru = False
+                                except (Exception, IndexError):
+                                    try:
+                                        if self.comp_board[a - 2][b] != 0 or self.comp_board[a - 1][b] != 0 or (
+                                                a - 2 < 0) or self.comp_board[a][b] != 0:
+                                            raise Exception
+                                        self.comp_board[a][b] = 1
+                                        self.comp_board[a - 2][b] = 1
+                                        self.comp_board[a - 1][b] = 1
+                                        flag_cru = False
+                                    except (Exception, IndexError):
+                                        flag_cru = True
+                                        a = randint(0, 7)
+                                        b = randint(0, 7)
+                                        direction = randint(1, 4)
+
+
+                    elif direction == 2:
+                        try:
+                            if self.comp_board[a + 2][b] != 0 or self.comp_board[a + 1][b] != 0 or \
+                                    self.comp_board[a][b] != 0:
+                                raise Exception
+                            self.comp_board[a][b] = 1
+                            self.comp_board[a + 2][b] = 1
+                            self.comp_board[a + 1][b] = 1
+                            flag_cru = False
+                        except (Exception, IndexError):
+                            try:
+                                if self.comp_board[a][b - 2] != 0 or self.comp_board[a][b - 1] != 0 or (
+                                        b - 2 < 0) or self.comp_board[a][b] != 0:
+                                    raise Exception
+                                self.comp_board[a][b] = 1
+                                self.comp_board[a][b - 2] = 1
+                                self.comp_board[a][b - 1] = 1
+                                flag_cru = False
+                            except (Exception, IndexError):
+                                try:
+                                    if self.comp_board[a - 2][b] != 0 or self.comp_board[a - 1][b] != 0 or (
+                                            a - 2 < 0) or self.comp_board[a][b] != 0:
+                                        raise Exception
+                                    self.comp_board[a][b] = 1
+                                    self.comp_board[a - 2][b] = 1
+                                    self.comp_board[a - 1][b] = 1
+                                    flag_cru = False
+                                except (Exception, IndexError):
+                                    try:
+                                        if self.comp_board[a][b + 2] != 0 or self.comp_board[a][b + 1] != 0 or \
+                                                self.comp_board[a][b] != 0:
+                                            raise Exception
+                                        self.comp_board[a][b] = 1
+                                        self.comp_board[a][b + 2] = 1
+                                        self.comp_board[a][b + 1] = 1
+                                        flag_cru = False
+                                    except (Exception, IndexError):
+                                        flag_cru = True
+                                        a = randint(0, 7)
+                                        b = randint(0, 7)
+                                        direction = randint(1, 4)
+
+                    elif direction == 3:
+                        try:
+                            if self.comp_board[a][b - 2] != 0 or self.comp_board[a][b - 1] != 0 or (b - 2 < 0) or \
+                                    self.comp_board[a][b] != 0:
+                                raise Exception
+                            self.comp_board[a][b] = 1
+                            self.comp_board[a][b - 2] = 1
+                            self.comp_board[a][b - 1] = 1
+                            flag_cru = False
+                        except (Exception, IndexError):
+                            try:
+                                if self.comp_board[a - 2][b] != 0 or self.comp_board[a - 1][b] != 0 or (
+                                        a - 2 < 0) or self.comp_board[a][b] != 0:
+                                    raise Exception
+                                self.comp_board[a][b] = 1
+                                self.comp_board[a - 2][b] = 1
+                                self.comp_board[a - 1][b] = 1
+                                flag_cru = False
+                            except (Exception, IndexError):
+                                try:
+                                    if self.comp_board[a][b + 2] != 0 or self.comp_board[a][b + 1] != 0 or \
+                                            self.comp_board[a][b] != 0:
+                                        raise Exception
+                                    self.comp_board[a][b] = 1
+                                    self.comp_board[a][b + 2] = 1
+                                    self.comp_board[a][b + 1] = 1
+                                    flag_cru = False
+                                except (Exception, IndexError):
+                                    try:
+                                        if self.comp_board[a + 2][b] != 0 or self.comp_board[a + 1][b] != 0 or \
+                                                self.comp_board[a][b] != 0:
+                                            raise Exception
+                                        self.comp_board[a][b] = 1
+                                        self.comp_board[a + 2][b] = 1
+                                        self.comp_board[a + 1][b] = 1
+                                        flag_cru = False
+                                    except (Exception, IndexError):
+                                        flag_cru = True
+                                        a = randint(0, 7)
+                                        b = randint(0, 7)
+                                        direction = randint(1, 4)
+
+                    elif direction == 4:
+                        try:
+                            if self.comp_board[a - 2][b] != 0 or self.comp_board[a - 1][b] != 0 or (a - 2 < 0) or \
+                                    self.comp_board[a][b] != 0:
+                                raise Exception
+                            self.comp_board[a][b] = 1
+                            self.comp_board[a - 2][b] = 1
+                            self.comp_board[a - 1][b] = 1
+                            flag_cru = False
+                        except (Exception, IndexError):
+                            try:
+                                if self.comp_board[a][b + 2] != 0 or self.comp_board[a][b + 1] != 0 or \
+                                        self.comp_board[a][b] != 0:
+                                    raise Exception
+                                self.comp_board[a][b] = 1
+                                self.comp_board[a][b + 2] = 1
+                                self.comp_board[a][b + 1] = 1
+                                flag_cru = False
+                            except (Exception, IndexError):
+                                try:
+                                    if self.comp_board[a + 2][b] != 0 or self.comp_board[a + 1][b] != 0 or \
+                                            self.comp_board[a][b] != 0:
+                                        raise Exception
+                                    self.comp_board[a][b] = 1
+                                    self.comp_board[a + 2][b] = 1
+                                    self.comp_board[a + 1][b] = 1
+                                    flag_cru = False
+                                except (Exception, IndexError):
+                                    try:
+                                        if self.comp_board[a][b - 2] != 0 or self.comp_board[a][b - 1] != 0 or (
+                                                b - 2 < 0) or self.comp_board[a][b] != 0:
+                                            raise Exception
+                                        self.comp_board[a][b] = 1
+                                        self.comp_board[a][b - 2] = 1
+                                        self.comp_board[a][b - 1] = 1
+                                        flag_cru = False
+                                    except (Exception, IndexError):
+                                        flag_cru = True
+                                        a = randint(0, 7)
+                                        b = randint(0, 7)
+                                        direction = randint(1, 4)
+                    Zero_to_Two_comp()
+
+            for i in range(3):  # расставляет эсминцы
+                flag_esm = True
+                a = randint(0, 7)
+                b = randint(0, 7)
+                direction = randint(1, 4)
+                while flag_esm:
+                    if direction == 1:
+                        try:
+                            if self.comp_board[a][b + 1] != 0 or self.comp_board[a][b] != 0:
+                                raise Exception
+                            self.comp_board[a][b] = 1
+                            self.comp_board[a][b + 1] = 1
+                            flag_esm = False
+                        except (Exception, IndexError):
+                            try:
+                                if self.comp_board[a + 1][b] != 0 or self.comp_board[a][b] != 0:
+                                    raise Exception
+                                self.comp_board[a][b] = 1
+                                self.comp_board[a + 1][b] = 1
+                                flag_esm = False
+                            except (Exception, IndexError):
+                                try:
+                                    if self.comp_board[a][b - 1] != 0 or (b - 1 < 0) or self.comp_board[a][b] != 0:
+                                        raise Exception
+                                    self.comp_board[a][b] = 1
+                                    self.comp_board[a][b - 1] = 1
+                                    flag_esm = False
+                                except (Exception, IndexError):
+                                    try:
+                                        if self.comp_board[a - 1][b] != 0 or (a - 1 < 0) or self.comp_board[a][
+                                            b] != 0:
+                                            raise Exception
+                                        self.comp_board[a][b] = 1
+                                        self.comp_board[a - 1][b] = 1
+                                        flag_esm = False
+                                    except (Exception, IndexError):
+                                        flag_esm = True
+                                        a = randint(0, 7)
+                                        b = randint(0, 7)
+                                        direction = randint(1, 4)
+
+
+                    elif direction == 2:
+                        try:
+                            if self.comp_board[a + 1][b] != 0 or self.comp_board[a][b] != 0:
+                                raise Exception
+                            self.comp_board[a][b] = 1
+                            self.comp_board[a + 1][b] = 1
+                            flag_esm = False
+                        except (Exception, IndexError):
+                            try:
+                                if self.comp_board[a][b - 1] != 0 or (b - 1 < 0) or self.comp_board[a][b] != 0:
+                                    raise Exception
+                                self.comp_board[a][b] = 1
+                                self.comp_board[a][b - 1] = 1
+                                flag_esm = False
+                            except (Exception, IndexError):
+                                try:
+                                    if self.comp_board[a - 1][b] != 0 or (a - 1 < 0) or self.comp_board[a][b] != 0:
+                                        raise Exception
+                                    self.comp_board[a][b] = 1
+                                    self.comp_board[a - 1][b] = 1
+                                    flag_esm = False
+                                except (Exception, IndexError):
+                                    try:
+                                        if self.comp_board[a][b + 1] != 0 or self.comp_board[a][b] != 0:
+                                            raise Exception
+                                        self.comp_board[a][b] = 1
+                                        self.comp_board[a][b + 1] = 1
+                                        flag_esm = False
+                                    except (Exception, IndexError):
+                                        flag_esm = True
+                                        a = randint(0, 7)
+                                        b = randint(0, 7)
+                                        direction = randint(1, 4)
+
+                    elif direction == 3:
+                        try:
+                            if self.comp_board[a][b - 1] != 0 or (b - 1 < 0) or self.comp_board[a][b] != 0:
+                                raise Exception
+                            self.comp_board[a][b] = 1
+                            self.comp_board[a][b - 1] = 1
+                            flag_esm = False
+                        except (Exception, IndexError):
+                            try:
+                                if self.comp_board[a - 1][b] != 0 or (a - 1 < 0) or self.comp_board[a][b] != 0:
+                                    raise Exception
+                                self.comp_board[a][b] = 1
+                                self.comp_board[a - 1][b] = 1
+                                flag_esm = False
+                            except (Exception, IndexError):
+                                try:
+                                    if self.comp_board[a][b + 1] != 0 or self.comp_board[a][b] != 0:
+                                        raise Exception
+                                    self.comp_board[a][b] = 1
+                                    self.comp_board[a][b + 1] = 1
+                                    flag_esm = False
+                                except (Exception, IndexError):
+                                    try:
+                                        if self.comp_board[a + 1][b] != 0 or self.comp_board[a][b] != 0:
+                                            raise Exception
+                                        self.comp_board[a][b] = 1
+                                        self.comp_board[a + 1][b] = 1
+                                        flag_esm = False
+                                    except (Exception, IndexError):
+                                        flag_esm = True
+                                        a = randint(0, 7)
+                                        b = randint(0, 7)
+                                        direction = randint(1, 4)
+
+                    elif direction == 4:
+                        try:
+                            if self.comp_board[a - 1][b] != 0 or (a - 1 < 0) or self.comp_board[a][b] != 0:
+                                raise Exception
+                            self.comp_board[a][b] = 1
+                            self.comp_board[a - 1][b] = 1
+                            flag_esm = False
+                        except (Exception, IndexError):
+                            try:
+                                if self.comp_board[a][b + 1] != 0 or self.comp_board[a][b] != 0:
+                                    raise Exception
+                                self.comp_board[a][b] = 1
+                                self.comp_board[a][b + 1] = 1
+                                flag_esm = False
+                            except (Exception, IndexError):
+                                try:
+                                    if self.comp_board[a + 1][b] != 0 or self.comp_board[a][b] != 0:
+                                        raise Exception
+                                    self.comp_board[a][b] = 1
+                                    self.comp_board[a + 1][b] = 1
+                                    flag_esm = False
+                                except (Exception, IndexError):
+                                    try:
+                                        if self.comp_board[a][b - 1] != 0 or (b - 1 < 0) or self.comp_board[a][
+                                            b] != 0:
+                                            raise Exception
+                                        self.comp_board[a][b] = 1
+                                        self.comp_board[a][b - 1] = 1
+                                        flag_esm = False
+                                    except (Exception, IndexError):
+                                        flag_esm = True
+                                        a = randint(0, 7)
+                                        b = randint(0, 7)
+                                        direction = randint(1, 4)
+                    Zero_to_Two_comp()
+
+            count_kat = 0
+            for i in range(4):  # расставляет катера
+                flag_kat = False
+                for j in range(len(self.comp_board)):
+                    for k in range(len(self.comp_board[i])):
+                        if self.comp_board[j][k] == 0:
+                            self.comp_board[j][k] = 1
+                            Zero_to_Two_comp()
+                            flag_kat = True
+                            count_kat += 1
+                            break
+                    if flag_kat: break
+            if count_kat < 4:
+                main_flag = True
+            elif count_kat == 4:
+                main_flag = False
+
 
 global flag_of_placement
 flag_of_placement = False
@@ -243,11 +762,12 @@ async def start_of_the_game(message: types.Message):
     await bot.send_message(message.from_user.id, (game.player_board_print()))
     await bot.send_message(message.from_user.id, 'Начинается расстановка кораблей')
     await bot.send_message(message.from_user.id, 'Начинается расстановка катеров')
-    global flag_of_kat, flag_of_esm, flag_of_kre, flag_of_lin
+    global flag_of_kat, flag_of_esm, flag_of_kre, flag_of_lin, flag_of_shoot
     flag_of_kat = False
     flag_of_esm = True
     flag_of_kre = True
     flag_of_lin = True
+    flag_of_shoot = False
 
 
 @dp.message_handler()
@@ -346,12 +866,16 @@ async def placement_of_kat_1(message: types.Message):
                 game.placement(d)
                 game.Zero_to_Two()
                 flag_of_lin = True
+                global flag_of_shoot
+                flag_of_shoot = True
                 for i in range(len(game.player_board)):
                     for j in range(len(game.player_board[i])):
                         if game.player_board[i][j] == '██':
                             game.copy_of_player_board[i][j] = 1
                 await bot.send_message(message.from_user.id, (game.player_board_print()))
                 await bot.send_message(message.from_user.id, 'Расстановка кораблей закончена')
+                game.placement_of_ships_bot()
+
     else:
         await bot.send_message(message.from_user.id, 'Напишите /start, чтобы начать игру')
 
