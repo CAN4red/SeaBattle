@@ -107,6 +107,9 @@ class SeaBattle():
         self.y_shoot = 0
         self.points = points_list
 
+    def __del__(self):
+        pass
+
     def player_board_print(self):  # вывод стола игрока
         st = ' '
         k = 1
@@ -131,18 +134,6 @@ class SeaBattle():
             k += 1
         return st
 
-    '''def copy_of_comp_board_print(self):  # вывод стола игрока
-        st = '\xa0\xa0\xa0'
-        k = 1
-        for i in string.ascii_uppercase[:8]:
-            st += ' \xa0\xa0\xa0\xa0\xa0' + i
-        for i in range(len(self.copy_of_comp_board)):
-            st += '\n' + str(k)
-            for j in range(len(self.copy_of_comp_board[i])):
-                st += '\xa0\xa0\xa0|\xa0\xa0\xa0' + self.copy_of_comp_board[i][j]
-            st += '\xa0\xa0\xa0|'
-            k += 1
-        return st'''
 
     def placement(self, point):  # функция отвечающая за перевод координат в индексы матрицы и постановку в соотвествующую позицию символ
         if point[0] == 'A':
@@ -313,11 +304,6 @@ class SeaBattle():
                         except:
                             pass
 
-        '''def can_put_point(x, y):
-            if self.comp_board[x][y] == 1 or self.comp_board[x][y] == 2:
-                return True
-            else:
-                return False'''
 
         # расставляет линкор
         main_flag = True
@@ -761,19 +747,21 @@ class SeaBattle():
         if point[0] == 'A':
             if self.comp_board[int(point[1]) - 1][0] == 1:
                 if (int(point[1]) - 1) > 0 and (int(point[1]) - 1) < 7:
-                    if self.comp_board[int(point[1]) - 2][0] != 1 and self.comp_board[int(point[1])][0] != 1 and self.comp_board[int(point[1]) - 1][1] != 1:
+                    if self.comp_board[int(point[1]) - 2][0] != 1 and self.comp_board[int(point[1])][0] != 1 and \
+                            self.comp_board[int(point[1]) - 1][1] != 1:
                         mes = 'Убит'
                         self.comp_board[int(point[1]) - 1][0] = 3
                         self.copy_of_comp_board[int(point[1]) - 1][0] = '██'
                         self.points[int(point[1]) - 1][0] = 0
                     else:
+                        mes = 'Ранен'
                         self.comp_board[int(point[1]) - 1][0] = 3
                         self.copy_of_comp_board[int(point[1]) - 1][0] = '██'
                         self.points[int(point[1]) - 1][0] = 0
                 elif (int(point[1]) - 1) == 0:
                     if self.comp_board[int(point[1])][0] != 1 and self.comp_board[int(point[1]) - 1][1] != 1:
                         mes = 'Убит'
-                        self.comp_board[int(point[1]) - 1][0] = 3
+                        self.comp_board[int(point[1]) - 1][7] = 3
                         self.copy_of_comp_board[int(point[1]) - 1][0] = '██'
                         self.points[int(point[1]) - 1][0] = 0
                     else:
@@ -800,7 +788,6 @@ class SeaBattle():
                 self.points[int(point[1]) - 1][0] = 0
             else:
                 mes = 'Неверная координата'
-
 
         elif point[0] == 'H':
             if self.comp_board[int(point[1]) - 1][7] == 1:
@@ -1222,10 +1209,10 @@ class SeaBattle():
                 if self.comp_board[i][j] == 1:
                     flag_bot = False
         if flag_player:
-            print('Вы проиграли')
+            return 'Вы проиграли'
         elif flag_bot:
-            print('Вы победили')
-        else: print('Произошло недоразумение :(')
+            return 'Вы победили'
+        else: return 'Произошло недоразумение :('
 
 
 global flag_of_placement
@@ -1258,6 +1245,7 @@ async def start_of_the_game(message: types.Message):
 
 @dp.message_handler()
 async def placement_of_kat_1(message: types.Message):
+    global flag_of_placement
     if flag_of_placement:
         global flag_of_kat, flag_of_esm, flag_of_kre, flag_of_lin
         if not flag_of_kat:
@@ -1279,7 +1267,7 @@ async def placement_of_kat_1(message: types.Message):
             if game.check_of_coordinates(container[0]) and game.check_of_coordinates(container[1]) and xor(
                     (container[0][0] != container[1][0]) or (abs(int(container[0][1]) - int(container[1][1])) != 1), (container[0][1] != container[1][1] or (
                             (container[0][0] + container[1][0] not in string.ascii_uppercase) and (
-                            container[1][0] + container[0][0] not in string.ascii_uppercase)))):
+                            container[1][0] + container[0][0] not in string.ascii_uppercase)))) and len(message.text) == 5:
                 game.placement(container[0])
                 game.placement(container[1])
                 game.Zero_to_Two()
@@ -1307,7 +1295,7 @@ async def placement_of_kat_1(message: types.Message):
             if game.check_of_coordinates(container[0]) and game.check_of_coordinates(container[1]) and game.check_of_coordinates(c) and xor(
                     (container[0][0] != container[1][0]) or (abs(int(container[0][1]) - int(container[1][1])) != 2), (container[0][1] != container[1][1] or (
                             (container[0][0] + c[0] + container[1][0] not in string.ascii_uppercase) and (
-                            container[1][0] + c[0] + container[0][0] not in string.ascii_uppercase)))):
+                            container[1][0] + c[0] + container[0][0] not in string.ascii_uppercase)))) and len(message.text) == 5:
                 game.placement(container[0])
                 game.placement(container[1])
                 game.placement(c)
@@ -1341,7 +1329,7 @@ async def placement_of_kat_1(message: types.Message):
                 d = 'X1'
 
             if not (game.check_of_coordinates(container[0]) and game.check_of_coordinates(container[1]) and game.check_of_coordinates(c) and game.check_of_coordinates(d) and xor((container[0][0] != container[1][0]) or (abs(int(container[0][1]) - int(container[1][1])) != 3),
-                                                           (container[0][1] != container[1][1] or ((container[0][0] + c[0] + d[0] + container[1][0] not in string.ascii_uppercase) and (container[1][0] + c[0] + d[0] + container[0][0] not in string.ascii_uppercase))))):
+                                                           (container[0][1] != container[1][1] or ((container[0][0] + c[0] + d[0] + container[1][0] not in string.ascii_uppercase) and (container[1][0] + c[0] + d[0] + container[0][0] not in string.ascii_uppercase)))) and len(message.text) == 5):
                 await bot.send_message(message.from_user.id, 'Ошибка координат!')
 
             else:
@@ -1370,15 +1358,30 @@ async def placement_of_kat_1(message: types.Message):
                 await bot.send_message(message.from_user.id, (game.copy_of_comp_board_print()))
                 game.bot_shoot()
                 await bot.send_message(message.from_user.id, (game.player_board_print()))
+                if game.game_over():
+                    await bot.send_message(message.from_user.id, (game.player_board_print()))
+                    await bot.send_message(message.from_user.id, 'Вы проиграли...')
+                    flag_of_placement = False
+
+
             elif turn == 'Ранен':
                 await bot.send_message(message.from_user.id, 'Ранен')
                 await bot.send_message(message.from_user.id, (game.copy_of_comp_board_print()))
+
             elif turn == 'Убит':
                 await bot.send_message(message.from_user.id, 'Убит')
                 await bot.send_message(message.from_user.id, (game.copy_of_comp_board_print()))
+                if game.game_over():
+                    await bot.send_message(message.from_user.id, 'Вы победили!!')
+                    flag_of_placement = False
+
             elif turn == 'Неверная координата':
                 await bot.send_message(message.from_user.id, 'Неверная координата')
                 await bot.send_message(message.from_user.id, (game.copy_of_comp_board_print()))
+        else:
+            await bot.send_message(message.from_user.id, 'Неверная координата')
+
+
 
 
 
