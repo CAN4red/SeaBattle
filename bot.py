@@ -61,16 +61,25 @@ points_list = [
 class SeaBattle():
     def __init__(self, player_board, copy_of_player_board, copy_of_comp_board, comp_board, flag_of_shooting1, flag_of_shooting2, flag_of_shooting3, x_shoot, y_shoot, points):
         self.player_board = [
-    ['░░', '░░', '░░', '░░', '░░', '░░', '░░', '░░'],
-    ['░░', '░░', '░░', '░░', '░░', '░░', '░░', '░░'],
-    ['░░', '░░', '░░', '░░', '░░', '░░', '░░', '░░'],
-    ['░░', '░░', '░░', '░░', '░░', '░░', '░░', '░░'],
-    ['░░', '░░', '░░', '░░', '░░', '░░', '░░', '░░'],
-    ['░░', '░░', '░░', '░░', '░░', '░░', '░░', '░░'],
-    ['░░', '░░', '░░', '░░', '░░', '░░', '░░', '░░'],
-    ['░░', '░░', '░░', '░░', '░░', '░░', '░░', '░░'],
-]
-        self.copy_of_player_board = board
+            ['░░', '░░', '░░', '░░', '░░', '░░', '░░', '░░'],
+            ['░░', '░░', '░░', '░░', '░░', '░░', '░░', '░░'],
+            ['░░', '░░', '░░', '░░', '░░', '░░', '░░', '░░'],
+            ['░░', '░░', '░░', '░░', '░░', '░░', '░░', '░░'],
+            ['░░', '░░', '░░', '░░', '░░', '░░', '░░', '░░'],
+            ['░░', '░░', '░░', '░░', '░░', '░░', '░░', '░░'],
+            ['░░', '░░', '░░', '░░', '░░', '░░', '░░', '░░'],
+            ['░░', '░░', '░░', '░░', '░░', '░░', '░░', '░░'],
+        ]
+        self.copy_of_player_board = [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]
+        ]
         self.copy_of_comp_board = board
         self.comp_board = board
         self.flag_of_shooting1 = True
@@ -224,11 +233,9 @@ async def start_of_the_game(message: types.Message):
     global count_kat
     global count_esm
     global count_kre
-    global count_lin
     count_kat = 0
     count_esm = 0
     count_kre = 0
-    count_lin = 0
     global flag_of_placement
     flag_of_placement = True
     global game
@@ -308,6 +315,43 @@ async def placement_of_kat_1(message: types.Message):
                     await bot.send_message(message.from_user.id, 'Начинается расстановка линкора')
             else:
                 await bot.send_message(message.from_user.id, 'Ошибка координат!')
+
+        elif not flag_of_lin:
+            container = message.text.split()
+            if (container[0][1] == container[1][1]) and string.ascii_uppercase.index(container[1][0]) > string.ascii_uppercase.index(container[0][0]):
+                c = string.ascii_uppercase[string.ascii_uppercase.index(container[0][0]) + 1] + container[0][1]
+                d = string.ascii_uppercase[string.ascii_uppercase.index(container[0][0]) + 2] + container[0][1]
+
+            elif (container[0][1] == container[1][1]) and string.ascii_uppercase.index(container[1][0]) < string.ascii_uppercase.index(container[0][0]):
+                c = string.ascii_uppercase[string.ascii_uppercase.index(container[1][0]) + 1] + container[0][1]
+                d = string.ascii_uppercase[string.ascii_uppercase.index(container[1][0]) + 2] + container[0][1]
+
+            elif (container[0][0] == container[1][0]) and (abs(int(container[0][1]) - int(container[1][1])) == 3):
+                c = container[0][0] + str(max(int(container[0][1]), int(container[1][1])) - 1)
+                d = container[0][0] + str(max(int(container[0][1]), int(container[1][1])) - 2)
+
+            else:
+                c = 'Z1'
+                d = 'X1'
+
+            if not (game.check_of_coordinates(container[0]) and game.check_of_coordinates(container[1]) and game.check_of_coordinates(c) and game.check_of_coordinates(d) and xor((container[0][0] != container[1][0]) or (abs(int(container[0][1]) - int(container[1][1])) != 3),
+                                                           (container[0][1] != container[1][1] or ((container[0][0] + c[0] + d[0] + container[1][0] not in string.ascii_uppercase) and (container[1][0] + c[0] + d[0] + container[0][0] not in string.ascii_uppercase))))):
+                await bot.send_message(message.from_user.id, 'Ошибка координат!')
+
+            else:
+
+                game.placement(container[0])
+                game.placement(container[1])
+                game.placement(c)
+                game.placement(d)
+                game.Zero_to_Two()
+                flag_of_lin = True
+                for i in range(len(game.player_board)):
+                    for j in range(len(game.player_board[i])):
+                        if game.player_board[i][j] == '██':
+                            game.copy_of_player_board[i][j] = 1
+                await bot.send_message(message.from_user.id, (game.player_board_print()))
+                await bot.send_message(message.from_user.id, 'Расстановка кораблей закончена')
     else:
         await bot.send_message(message.from_user.id, 'Напишите /start, чтобы начать игру')
 
